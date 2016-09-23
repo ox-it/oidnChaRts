@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: oidnChaRts\nType: Package\nTitle: Utility Functions For htmlwidget Visualisations\nVersion: 0.0.0.9000\nAuthors@R: person(\"Martin\", \"Hadley\", email = \"martin.hadley@it.ox.ac.uk\", role = c(\"aut\", \"cre\"))\nDescription: Provides templates for standard chart types built with htmlwidget\n    libraries, complements material on idn.it.ox.ac.uk\nLicense: MIT + file LICENSE\nLazyData: TRUE\nImports:\n    gapminder\nDepends:\n    plyr,\n    dplyr (>= 0.3.0.1),\n    highcharter,\n    plotly\nURL: http://ox-it.github.io/OxfordIDN_htmlwidgets\nRoxygenNote: 5.0.1\nSuggests: knitr,\n    rmarkdown,\n    testthat\nVignetteBuilder: knitr\n",
+    "created" : 1474624976732.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3180624020",
+    "id" : "147E25BD",
+    "lastKnownWriteTime" : 1474633657,
+    "last_content_update" : 1474633657904,
+    "path" : "~/Github/oidnChaRts/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}
