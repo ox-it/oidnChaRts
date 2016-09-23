@@ -29,7 +29,7 @@ It is a good default to choose var.}
 Stacked bar chart of the class specified by the specified library.
 }
 \description{
-\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the libraries \%>\% workflow..
+\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the librarie's \%>\% workflow..
 }
 \examples{
 stacked_bar_chart(1, 1)

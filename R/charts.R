@@ -56,8 +56,7 @@ stacked_bar_chart <- function(data = NA,
   )
 }
 
-
-
+#' highchart bar chart
 hc_stacked_bar_chart <- function(data = NA,
                                  categories_column = NA,
                                  measure_columns = NA,
@@ -91,6 +90,7 @@ hc_stacked_bar_chart <- function(data = NA,
 
 }
 
+#' Plotly Stacked Bar Chart.
 plotly_stacked_bar_chart <- function(data = NA,
                                      categories_column = NA,
                                      measure_columns = NA,
