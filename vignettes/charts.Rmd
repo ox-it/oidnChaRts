@@ -1,0 +1,187 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# Stacked Bar Chart
+
+This is the sample dataset:
+
+```{r}
+sample_data <- data.frame(
+  "Countries" = c(
+    "United Kingdom","France","Saudi Arabia","Egypt","Germany","China","Slovakia","Canada","Estonia","Ireland"
+  ),
+  "Business" =  c(8, 6, 7, 8, 9, 7, 9, 7, 9, 9),
+  "Overlay" = c(22, 28, 11, 19, 11, 39, 22, 10, 30, 7),
+  "Personal" = c(19, 21, 21, 20, 19, 19, 21, 21, 20, 20),
+  "Teleconference" = c(9, 29, 21, 44, 59, 11, 53, 16, 49, 36),
+  "Unclassified" = c(42, 48, 50, 45, 49, 40, 42, 47, 48, 44),
+  stringsAsFactors = F
+)
+# Columns
+categories_column <- "Countries"
+subcategories_column <- "activity"
+value_column <- "hours"
+# Convert to long-format
+sample_data <- sample_data %>%
+  gather(activity, hours, match(setdiff(colnames(sample_data), categories_column), colnames(sample_data)))
+```
+
+
+## Grouped Bar Charts
+
+If highcharter is selected, the data will automatically be reshaped into wide format:
+
+```{r}
+stacked_bar_chart(data = sample_data,
+                  library = "highcharter",
+                  categories_column = categories_column,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column)
+```
+
+If plotly is selected the data will be provided directly to plotly for visualisation:
+
+```{r}
+stacked_bar_chart(data = sample_data,
+                  library = "plotly",
+                  categories_column = categories_column,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column)
+```
+
+### Ordering Categories
+
+Highcharter
+
+```{r}
+country_order <- c("United Kingdom", "Canada", "China", "Estonia", "Egypt", "France", "Germany", 
+"Ireland", "Saudi Arabia", "Slovakia")
+stacked_bar_chart(data = sample_data,
+                  library = "highcharter",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column)
+```
+
+Plotly ordered categories:
+
+```{r}
+country_order <- c("Canada", "China", "Egypt", "Estonia", "France", "Germany", 
+"Ireland", "Saudi Arabia", "Slovakia", "United Kingdom")
+stacked_bar_chart(data = sample_data,
+                  library = "plotly",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column)
+```
+
+### Explicitly Ordering Subcategories
+
+Highcharter explicitly ordered subcategories:
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "highcharter",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order)
+```
+
+Plotly explicitly ordered subcategories:
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "plotly",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order)
+```
+
+## Stacked Normal
+
+Highcharter explicitly ordered subcategories with stacked bars.
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "highcharter",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order,
+                  stacking_type = "normal")
+```
+
+Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "plotly",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order,
+                  stacking_type = "normal")
+```
+
+
+
+## Stacked Percentage
+
+Highcharter explicitly ordered subcategories with stacked bars.
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "highcharter",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order,
+                  stacking_type = "percent")
+```
+
+Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
+
+```{r}
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+
+stacked_bar_chart(data = sample_data,
+                  library = "plotly",
+                  categories_column = categories_column,
+                  categories_order = country_order,
+                  subcategories_column = subcategories_column,
+                  value_column = value_column,
+                  subcategories_order = activity_order,
+                  stacking_type = "percent")
+```
+
+
