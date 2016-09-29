@@ -10,8 +10,8 @@ LazyData: TRUE
 Imports:
     gapminder
 Depends:
-    plyr,
     dplyr (>= 0.3.0.1),
+    tidyr,
     highcharter,
     plotly
 URL: http://ox-it.github.io/OxfordIDN_htmlwidgets

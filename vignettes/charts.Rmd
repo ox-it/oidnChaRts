@@ -12,18 +12,20 @@ vignette: >
 
 <!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
 
+
 # Stacked Bar Chart
 
 This is the sample dataset:
 
 ```{r}
+library(tidyr)
 sample_data <- data.frame(
   "Countries" = c(
     "United Kingdom","France","Saudi Arabia","Egypt","Germany","China","Slovakia","Canada","Estonia","Ireland"
   ),
   "Business" =  c(8, 6, 7, 8, 9, 7, 9, 7, 9, 9),
   "Overlay" = c(22, 28, 11, 19, 11, 39, 22, 10, 30, 7),
-  "Personal" = c(19, 21, 21, 20, 19, 19, 21, 21, 20, 20),
+  "Personal Visit" = c(19, 21, 21, 20, 19, 19, 21, 21, 20, 20),
   "Teleconference" = c(9, 29, 21, 44, 59, 11, 53, 16, 49, 36),
   "Unclassified" = c(42, 48, 50, 45, 49, 40, 42, 47, 48, 44),
   stringsAsFactors = F
@@ -93,7 +95,7 @@ stacked_bar_chart(data = sample_data,
 Highcharter explicitly ordered subcategories:
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
 
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
@@ -107,7 +109,7 @@ stacked_bar_chart(data = sample_data,
 Plotly explicitly ordered subcategories:
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
 
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
@@ -123,7 +125,7 @@ stacked_bar_chart(data = sample_data,
 Highcharter explicitly ordered subcategories with stacked bars.
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
 
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",

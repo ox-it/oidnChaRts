@@ -71,16 +71,23 @@ hc_stacked_bar_chart <- function(data = NA,
                                  stacking_type = NA,
                                  ordering_function = NA,
                                  subcategories_order = NA) {
-  data %>%
-    spread_(subcategories_column, value_column) -> wide_data
+  ## Compute categories_order, if necessary
+  if (any(is.na(categories_order))) {
+    categories_order <-unique(data[, categories_column])
+  } else {
+    categories_order <- categories_order
+  }
+
+  ## make wide
+  ungroup(data) %>%
+    spread_(subcategories_column, value_column) %>%
+    setNames(make.names(names(.))) -> wide_data
+  ## order category columns by categories_order
+  wide_data <- wide_data[match(categories_order, wide_data[[categories_column]]), ]
 
   data_columns <- setdiff(colnames(wide_data), categories_column)
 
-  if (any(is.na(categories_order))) {
-    category_order <- unique(data[, categories_column])
-  } else {
-    category_order <- categories_order
-  }
+  subcategories_order <- make.names(subcategories_order)
 
   # if (is.na(ordering_function)) {
   #   ordered_measures <- data_columns
@@ -90,15 +97,14 @@ hc_stacked_bar_chart <- function(data = NA,
   #       ordering_function(wide_data[, x])
   #     })), decreasing = TRUE)]
   # }
-
   chart <-
-    highchart() %>% hc_xAxis(categories = category_order, title = categories_column)
+    highchart() %>% hc_xAxis(categories = categories_order, title = categories_column)
 
   invisible(lapply(data_columns, function(x) {
     chart <<-
       hc_add_series(
         hc = chart,
-        name = x,
+        name = gsub("[.]", " ", x),
         data = wide_data %>% select_(x) %>% unlist(use.names = F),
         index = {
           if (any(is.na(subcategories_order))) {
@@ -166,9 +172,9 @@ plotly_stacked_bar_chart <- function(data = NA,
   chart <- plot_ly(
     data = data,
     type = "bar",
-    y = eval(as.name(categories_column)),
-    x = eval(as.name(value_column)),
-    color = eval(as.name(subcategories_column)),
+    y = ~eval(as.name(categories_column)),
+    x = ~eval(as.name(value_column)),
+    color = ~eval(as.name(subcategories_column)),
     orientation = "h"
   ) %>%
     layout(
