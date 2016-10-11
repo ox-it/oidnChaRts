@@ -1,7 +1,7 @@
 Package: oidnChaRts
 Type: Package
 Title: Utility Functions For htmlwidget Visualisations
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Authors@R: person("Martin", "Hadley", email = "martin.hadley@it.ox.ac.uk", role = c("aut", "cre"))
 Description: Provides templates for standard chart types built with htmlwidget
     libraries, complements material on idn.it.ox.ac.uk
