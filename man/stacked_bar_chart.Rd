@@ -5,40 +5,44 @@
 \title{Stacked Bar Chart.}
 \usage{
 stacked_bar_chart(data = NA, library = "highcharter",
-  categories_column = NA, measure_columns = NA, stacking_type = NA,
-  ordering_function = c, explicit_order = NA)
+  categories.column = NA, categories.order = NA,
+  subcategories.column = NA, value.column = NA, stacking.type = NA,
+  subcategories.order = NA)
 }
 \arguments{
-\item{data}{A dataframe.}
+\item{data}{A dataframe, must be long-formatted.}
 
 \item{library}{Which library to use, highchart is default.}
 
-\item{categories_column}{Divisions within each bar.}
+\item{categories.column}{Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels.}
 
-\item{measure_columns}{Column names containing data for bars (each category is a specific bar),
-this could also be considered as the "y-axis" in a horizontally orientated bar chart.}
+\item{categories.order}{Order for categories}
 
-\item{stacking_type}{Stacking to apply to bars, default NULL. Possible values, c("percent", "normal")}
+\item{subcategories.column}{Column containing different measures, i.e sub-categorisations.}
 
-\item{ordering_function}{Function applied to bar segments to decide on order, default c.
-It is a good default to choose var.}
+\item{value.column}{Column containing bar values, i.e. lengths.}
 
-\item{explicit_order}{Overrides ordering_function, order must be given by index.}
+\item{stacking.type}{Stacking to apply to bars, default NULL. Possible values, c("percent", "normal")}
+
+\item{subcategories.order}{Order for sub-categories, note for plotly the legend is ordered correctly but bars are reverse ordered}
 }
 \value{
 Stacked bar chart of the class specified by the specified library.
 }
 \description{
-\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the librarie's \%>\% workflow..
+\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the librarie's \%>\% workflow. Data must be provided in long format.
+}
+\section{Warning}{
+ These should be considered utility functions only, the magic is contained within the htmlwidget library,
+ it is perfectly possible breaking changes to the library and/or the underling JavaScript library will
+ break these. In such case, refer to http://ox-it.github.io/OxfordIDN_htmlwidgets for generic tutorials on
+the widely used htmlwidget libraries and how to select an alternative visualisation library.
 }
 \examples{
+\dontrun{
 stacked_bar_chart(1, 1)
 stacked_bar_chart(1, "foo")
+}
 
-#' @section Warning:
-These should be considered utility functions only, the magic is contained within the htmlwidget library,
-it is perfectly possible breaking changes to the library and/or the underling JavaScript library will
-break these. In such case, refer to http://ox-it.github.io/OxfordIDN_htmlwidgets for generic tutorials on
-the widely used htmlwidget libraries and how to select an alternative visualisation library.
 }
 

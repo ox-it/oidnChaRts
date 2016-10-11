@@ -19,6 +19,7 @@ This is the sample dataset:
 
 ```{r}
 library(tidyr)
+library(oidnChaRts)
 sample_data <- data.frame(
   "Countries" = c(
     "United Kingdom","France","Saudi Arabia","Egypt","Germany","China","Slovakia","Canada","Estonia","Ireland"
@@ -47,19 +48,20 @@ If highcharter is selected, the data will automatically be reshaped into wide fo
 ```{r}
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
-                  categories_column = categories_column,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column)
+                  categories.column = categories_column,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column)
 ```
 
 If plotly is selected the data will be provided directly to plotly for visualisation:
 
 ```{r}
+sample_data
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
-                  categories_column = categories_column,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column)
+                  categories.column = categories_column,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column)
 ```
 
 ### Ordering Categories
@@ -71,10 +73,10 @@ country_order <- c("United Kingdom", "Canada", "China", "Estonia", "Egypt", "Fra
 "Ireland", "Saudi Arabia", "Slovakia")
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column)
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column)
 ```
 
 Plotly ordered categories:
@@ -84,10 +86,10 @@ country_order <- c("Canada", "China", "Egypt", "Estonia", "France", "Germany",
 "Ireland", "Saudi Arabia", "Slovakia", "United Kingdom")
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column)
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column)
 ```
 
 ### Explicitly Ordering Subcategories
@@ -99,11 +101,11 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Te
 
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order)
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order)
 ```
 
 Plotly explicitly ordered subcategories:
@@ -113,11 +115,11 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Te
 
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order)
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order)
 ```
 
 ## Stacked Normal
@@ -129,12 +131,12 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Te
 
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order,
-                  stacking_type = "normal")
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order,
+                  stacking.type = "normal")
 ```
 
 Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
@@ -144,12 +146,12 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconf
 
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order,
-                  stacking_type = "normal")
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order,
+                  stacking.type = "normal")
 ```
 
 
@@ -163,12 +165,12 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconf
 
 stacked_bar_chart(data = sample_data,
                   library = "highcharter",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order,
-                  stacking_type = "percent")
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order,
+                  stacking.type = "percent")
 ```
 
 Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
@@ -178,12 +180,12 @@ activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconf
 
 stacked_bar_chart(data = sample_data,
                   library = "plotly",
-                  categories_column = categories_column,
-                  categories_order = country_order,
-                  subcategories_column = subcategories_column,
-                  value_column = value_column,
-                  subcategories_order = activity_order,
-                  stacking_type = "percent")
+                  categories.column = categories_column,
+                  categories.order = country_order,
+                  subcategories.column = subcategories_column,
+                  value.column = value_column,
+                  subcategories.order = activity_order,
+                  stacking.type = "percent")
 ```
 
 
