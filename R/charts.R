@@ -166,6 +166,6 @@ plotly_stacked_bar_chart <- function(data = NA,
     chart
   } else {
     chart %>%
-      layout(barmode = "stack", barnorm = stacking.type)
+      layout(barmode = "stack", barnorm = stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
   }
 }
