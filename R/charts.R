@@ -3,7 +3,7 @@
 
 #' Stacked Bar Chart.
 #'
-#' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the librarie's \%>\% workflow. Data must be provided in long format.
+#' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 #'
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
