@@ -10,6 +10,7 @@ LazyData: TRUE
 Imports:
     gapminder
 Depends:
+    lazyeval,
     dplyr (>= 0.3.0.1),
     tidyr,
     highcharter,
@@ -18,5 +19,6 @@ URL: http://ox-it.github.io/OxfordIDN_htmlwidgets
 RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown,
-    testthat
+    testthat,
+    geosphere
 VignetteBuilder: knitr
