@@ -30,7 +30,7 @@ stacked_bar_chart(data = NA, library = "highcharter",
 Stacked bar chart of the class specified by the specified library.
 }
 \description{
-\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the librarie's \%>\% workflow. Data must be provided in long format.
+\code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 }
 \section{Warning}{
  These should be considered utility functions only, the magic is contained within the htmlwidget library,
