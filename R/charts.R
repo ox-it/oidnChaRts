@@ -34,6 +34,14 @@ stacked_bar_chart <- function(data = NA,
                               value.column = NA,
                               stacking.type = NA,
                               subcategories.order = NA) {
+  ## check library is supported
+  if(!library %in% c("highcharter","plotly")){
+    stop(paste("The selected library is not supported, choose from; leaflet or plotly"))
+  }
+
+  optnl.args <-
+    mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
+
   switch (
     library,
     "highcharter" = hc_stacked_bar_chart(

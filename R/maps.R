@@ -18,15 +18,18 @@ geo_lines_map <-
              sender.radius = 1.2,
              receiver.radius = 1.2
            )) {
+
+    ## check library is supported
+    if(!library %in% c("leaflet")){
+      stop(paste("The selected library is not supported, choose from; leaflet."))
+    }
+
     optnl.args <-
       mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
     switch(
       library,
       "leaflet" = leaflet_geo_lines_map(data = data,
-                                        optnl.args = optnl.args),
-      "plotly" = {
-        # not written
-      }
+                                        optnl.args = optnl.args)
     )
   }
 
