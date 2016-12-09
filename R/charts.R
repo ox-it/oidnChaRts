@@ -46,22 +46,12 @@ stacked_bar_chart <- function(data = NA,
     library,
     "highcharter" = hc_stacked_bar_chart(
       data = data,
-      categories.column = categories.column,
-      categories.order = categories.order,
-      subcategories.column = subcategories.column,
-      value.column = value.column,
-      stacking.type = stacking.type,
-      subcategories.order = subcategories.order
+      optnl.args
     ),
     "plotly" = {
       plotly_stacked_bar_chart(
         data = data,
-        categories.column = categories.column,
-        categories.order = categories.order,
-        subcategories.column = subcategories.column,
-        value.column = value.column,
-        stacking.type = stacking.type,
-        subcategories.order = subcategories.order
+        optnl.args
       )
     }
   )
@@ -69,32 +59,27 @@ stacked_bar_chart <- function(data = NA,
 
 #' highchart bar chart
 hc_stacked_bar_chart <- function(data = NA,
-                                 categories.column = NA,
-                                 categories.order = NA,
-                                 subcategories.column = NA,
-                                 value.column = NA,
-                                 stacking.type = NA,
-                                 subcategories.order = NA) {
+                                 optnl.args = NA) {
   ## Compute categories.order, if necessary
-  if (any(is.na(categories.order))) {
-    categories_order <-unique(data[, categories.column])
+  if (any(is.na(optnl.args$categories.order))) {
+    categories_order <-unique(data[, optnl.args$categories.column])
   } else {
-    categories_order <- categories.order
+    categories_order <- optnl.args$categories.order
   }
 
   ## make wide
   ungroup(data) %>%
-    spread_(subcategories.column, value.column) %>%
+    spread_(optnl.args$subcategories.column, optnl.args$value.column) %>%
     setNames(make.names(names(.))) -> wide_data
   ## order category columns by categories_order
-  wide_data <- wide_data[match(categories_order, wide_data[[categories.column]]), ]
+  wide_data <- wide_data[match(categories_order, wide_data[[optnl.args$categories.column]]), ]
 
-  data_columns <- setdiff(colnames(wide_data), categories.column)
+  data_columns <- setdiff(colnames(wide_data), optnl.args$categories.column)
 
-  subcategories_order <- make.names(subcategories.order)
+  subcategories_order <- make.names(optnl.args$subcategories.order)
 
   chart <-
-    highchart() %>% hc_xAxis(categories = categories_order, title = categories.column)
+    highchart() %>% hc_xAxis(categories = categories_order, title = optnl.args$categories.column)
 
   invisible(lapply(data_columns, function(x) {
     chart <<-
@@ -104,14 +89,14 @@ hc_stacked_bar_chart <- function(data = NA,
         data = wide_data %>% select_(x) %>% unlist(use.names = F),
         index = {
           if (any(is.na(subcategories_order))) {
-            if (is.na(stacking.type)) {
+            if (is.na(optnl.args$stacking.type)) {
               length(subcategories_order) - which(subcategories_order == x) - 1
             } else {
               which(subcategories_order == x) - 1
             }
           } else
 
-            if (is.na(stacking.type)) {
+            if (is.na(optnl.args$stacking.type)) {
               length(subcategories_order) - which(rev(subcategories_order) == x) - 1
             } else {
               which(rev(subcategories_order) == x) - 1
@@ -123,57 +108,51 @@ hc_stacked_bar_chart <- function(data = NA,
 
   chart %>%
     hc_chart(type = "bar") %>%
-    hc_plotOptions(series = list(stacking = as.character(stacking.type))) %>%
-    hc_legend(reversed = ifelse(is.na(stacking.type), FALSE, TRUE))
+    hc_plotOptions(series = list(stacking = as.character(optnl.args$stacking.type))) %>%
+    hc_legend(reversed = ifelse(is.na(optnl.args$stacking.type), FALSE, TRUE))
 
 }
 
 #' Plotly Stacked Bar Chart.
 plotly_stacked_bar_chart <- function(data = NA,
-                                     categories.column = NA,
-                                     categories.order = NA,
-                                     subcategories.column = NA,
-                                     value.column = NA,
-                                     stacking.type = NA,
-                                     # ordering.function = NA,
-                                     subcategories.order = NA) {
+                                     optnl.args = NA) {
   # sample_data %>% gather_("Activity", "Days", setdiff(colnames(sample_data), "Countries"))
 
   plot_data <- data
 
-  if (!any(is.na(subcategories.order))) {
+  if (!any(is.na(optnl.args$subcategories.order))) {
     ## grouped bars do not reverse the legend, but does reverse bar order
-    if(is.na(stacking.type)){
-      plot_data[, subcategories.column] <-
-        factor(plot_data[, subcategories.column], levels = subcategories.order)
+    if(is.na(optnl.args$stacking.type)){
+      plot_data[, optnl.args$subcategories.column] <-
+        factor(plot_data[, optnl.args$subcategories.column], levels = optnl.args$subcategories.order)
     }
     } else {
       ## allow automated ordering
       plot_data
     }
 
-  if (!any(is.na(categories.order))) {
-    plot_data[, categories.column] <-
-      factor(plot_data[, categories.column], levels = rev(categories.order))
+  if (!any(is.na(optnl.args$categories.order))) {
+    plot_data[, optnl.args$categories.column] <-
+      factor(plot_data[, optnl.args$categories.column], levels = rev(optnl.args$categories.order))
   }
 
   chart <- plot_ly(
     data = plot_data,
     type = "bar",
-    y = ~eval(as.name(categories.column)),
-    x = ~eval(as.name(value.column)),
-    color = ~eval(as.name(subcategories.column)),
+    y = ~eval(as.name(optnl.args$categories.column)),
+    x = ~eval(as.name(optnl.args$value.column)),
+    color = ~eval(as.name(optnl.args$subcategories.column)),
     orientation = "h"
   ) %>%
     layout(
-      xaxis = list(title = value.column),
-      yaxis = list(title = categories.column)
+      xaxis = list(title = optnl.args$value.column),
+      yaxis = list(title = optnl.args$categories.column)
     )
 
-  if (is.na(stacking.type)) {
+  if (is.na(optnl.args$stacking.type)) {
     chart
   } else {
     chart %>%
-      layout(barmode = "stack", barnorm = stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
+      layout(barmode = "stack", barnorm = optnl.args$stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
   }
 }
