@@ -9,6 +9,17 @@ geo_lines_map(data = NA, library = "leaflet", line.color = "#2c7bb6",
   line.options = list(weight = 4), termini.options = list(sender.fill =
   FALSE, receiver.fill = TRUE, sender.radius = 1.2, receiver.radius = 1.2))
 }
+\arguments{
+\item{data}{A data.frame with sender-receiver pairs, needs the following columns
+\itemize{
+ \item{"sender.longitude"}{ : sender longitude}
+ \item{"sender.latitude"}{ : sender latitude}
+ \item{"receiver.longitude"}{ : receiver longitude}
+ \item{"receiver.latitude"}{ : receiver latitude}
+ }
+
+ @param library must be one of the supported libraries, currently; "leaflet". Defaults to "leaflet".}
+}
 \description{
 \code{geo_lines_map} creates a map with lines (great circles) between geo graphic locations using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 }

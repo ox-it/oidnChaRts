@@ -4,9 +4,7 @@
 \alias{hc_stacked_bar_chart}
 \title{highchart bar chart}
 \usage{
-hc_stacked_bar_chart(data = NA, categories.column = NA,
-  categories.order = NA, subcategories.column = NA, value.column = NA,
-  stacking.type = NA, subcategories.order = NA)
+hc_stacked_bar_chart(data = NA, optnl.args = NA)
 }
 \description{
 highchart bar chart
