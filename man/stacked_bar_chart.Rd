@@ -7,7 +7,7 @@
 stacked_bar_chart(data = NA, library = "highcharter",
   categories.column = NA, categories.order = NA,
   subcategories.column = NA, value.column = NA, stacking.type = NA,
-  subcategories.order = NA)
+  subcategories.order = NA, return.data = FALSE)
 }
 \arguments{
 \item{data}{A dataframe, must be long-formatted.}
