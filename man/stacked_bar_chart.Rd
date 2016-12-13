@@ -14,13 +14,13 @@ stacked_bar_chart(data = NA, library = "highcharter",
 
 \item{library}{Which library to use, highchart is default.}
 
-\item{categories.column}{Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels.}
+\item{categories.column}{Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels. Must be given as formula, i.e. ~country}
 
 \item{categories.order}{Order for categories}
 
-\item{subcategories.column}{Column containing different measures, i.e sub-categorisations.}
+\item{subcategories.column}{Column containing different measures, i.e sub-categorisations. Must be given as formula, i.e. ~country}
 
-\item{value.column}{Column containing bar values, i.e. lengths.}
+\item{value.column}{Column containing bar values, i.e. lengths. Must be given as formula, i.e. ~country}
 
 \item{stacking.type}{Stacking to apply to bars, default NULL. Possible values, c("percent", "normal")}
 

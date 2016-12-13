@@ -6,10 +6,10 @@
 #'
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
-#' @param categories.column  Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels.
+#' @param categories.column  Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels. Must be given as formula, i.e. ~country
 #' @param categories.order Order for categories
-#' @param subcategories.column Column containing different measures, i.e sub-categorisations.
-#' @param value.column Column containing bar values, i.e. lengths.
+#' @param subcategories.column Column containing different measures, i.e sub-categorisations. Must be given as formula, i.e. ~country
+#' @param value.column Column containing bar values, i.e. lengths. Must be given as formula, i.e. ~country
 #' @param stacking.type Stacking to apply to bars, default NULL. Possible values, c("percent", "normal")
 #' @param subcategories.order Order for sub-categories, note for plotly the legend is ordered correctly but bars are reverse ordered
 #'
