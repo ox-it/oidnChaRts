@@ -33,19 +33,16 @@ geo_lines_map <-
              sender.radius = 1.2,
              receiver.radius = 1.2
            )) {
-
     ## check library is supported
-    if(!library %in% c("leaflet")){
+    if (!library %in% c("leaflet")) {
       stop(paste("The selected library is not supported, choose from; leaflet."))
     }
 
     optnl.args <-
       mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
-    switch(
-      library,
-      "leaflet" = leaflet_geo_lines_map(data = data,
-                                        optnl.args = optnl.args)
-    )
+    switch(library,
+           "leaflet" = leaflet_geo_lines_map(data = data,
+                                             optnl.args = optnl.args))
   }
 
 #' leaflet_geo_lines_map
@@ -121,8 +118,9 @@ addLegendCustom <-
   }
 
 #' leaflet_termini_legend
-leaflet_termini_legend <- function(map = NA, colors = NA,
-                                   optnl.args = NA){
+leaflet_termini_legend <- function(map = NA,
+                                   colors = NA,
+                                   optnl.args = NA) {
   map %>%
     addLegendCustom(
       colors = c("#fdae61", "#d7191c"),
@@ -130,5 +128,3 @@ leaflet_termini_legend <- function(map = NA, colors = NA,
       sizes = c(10, 10)
     )
 }
-
-

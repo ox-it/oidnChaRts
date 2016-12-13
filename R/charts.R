@@ -34,8 +34,10 @@ stacked_bar_chart <- function(data = NA,
                               stacking.type = NA,
                               subcategories.order = NA) {
   ## check library is supported
-  if(!library %in% c("highcharter","plotly")){
-    stop(paste("The selected library is not supported, choose from; leaflet or plotly"))
+  if (!library %in% c("highcharter", "plotly")) {
+    stop(paste(
+      "The selected library is not supported, choose from; leaflet or plotly"
+    ))
   }
 
   optnl.args <-
@@ -43,15 +45,11 @@ stacked_bar_chart <- function(data = NA,
 
   switch (
     library,
-    "highcharter" = hc_stacked_bar_chart(
-      data = data,
-      optnl.args = optnl.args
-    ),
+    "highcharter" = hc_stacked_bar_chart(data = data,
+                                         optnl.args = optnl.args),
     "plotly" = {
-      plotly_stacked_bar_chart(
-        data = data,
-        optnl.args = optnl.args
-      )
+      plotly_stacked_bar_chart(data = data,
+                               optnl.args = optnl.args)
     }
   )
 }
@@ -73,18 +71,22 @@ hc_stacked_bar_chart <- function(data = NA,
 
   ## make wide
   ungroup(data) %>%
-    spread_(f_text(optnl.args$subcategories.column), f_text(optnl.args$value.column)) %>%
+    spread_(f_text(optnl.args$subcategories.column),
+            f_text(optnl.args$value.column)) %>%
     setNames(make.names(names(.))) -> wide_data
 
   ## order category columns by categories_order
-  wide_data <- wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]), ]
+  wide_data <-
+    wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]),]
 
-  data_columns <- setdiff(colnames(wide_data), f_text(optnl.args$categories.column))
+  data_columns <-
+    setdiff(colnames(wide_data), f_text(optnl.args$categories.column))
 
   subcategories_order <- make.names(optnl.args$subcategories.order)
 
   chart <-
-    highchart() %>% hc_xAxis(categories = categories_order, title = f_text(optnl.args$categories.column))
+    highchart() %>% hc_xAxis(categories = categories_order,
+                             title = f_text(optnl.args$categories.column))
 
   invisible(lapply(data_columns, function(x) {
     chart <<-
@@ -127,14 +129,14 @@ plotly_stacked_bar_chart <- function(data = NA,
 
   if (!any(is.na(optnl.args$subcategories.order))) {
     ## grouped bars do not reverse the legend, but does reverse bar order
-    if(is.na(optnl.args$stacking.type)){
+    if (is.na(optnl.args$stacking.type)) {
       plot_data[, f_text(optnl.args$subcategories.column)] <-
         factor(plot_data[, f_text(optnl.args$subcategories.column)], levels = optnl.args$subcategories.order)
     }
-    } else {
-      ## allow automated ordering
-      plot_data
-    }
+  } else {
+    ## allow automated ordering
+    plot_data
+  }
 
   if (!any(is.na(optnl.args$categories.order))) {
     plot_data[, f_text(optnl.args$categories.column)] <-
@@ -149,10 +151,8 @@ plotly_stacked_bar_chart <- function(data = NA,
     color = optnl.args$subcategories.column,
     orientation = "h"
   ) %>%
-    layout(
-      xaxis = list(title = f_text(optnl.args$value.column)),
-      yaxis = list(title = f_text(optnl.args$categories.column))
-    )
+    layout(xaxis = list(title = f_text(optnl.args$value.column)),
+           yaxis = list(title = f_text(optnl.args$categories.column)))
 
   if (is.na(optnl.args$stacking.type)) {
     chart
