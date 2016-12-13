@@ -32,7 +32,8 @@ stacked_bar_chart <- function(data = NA,
                               subcategories.column = NA,
                               value.column = NA,
                               stacking.type = NA,
-                              subcategories.order = NA) {
+                              subcategories.order = NA,
+                              return.data = FALSE) {
   ## check library is supported
   if (!library %in% c("highcharter", "plotly")) {
     stop(paste(
@@ -83,6 +84,10 @@ hc_stacked_bar_chart <- function(data = NA,
     setdiff(colnames(wide_data), f_text(optnl.args$categories.column))
 
   subcategories_order <- make.names(optnl.args$subcategories.order)
+
+  if (optnl.args$return.data) {
+    return(wide_data)
+  }
 
   chart <-
     highchart() %>% hc_xAxis(categories = categories_order,
