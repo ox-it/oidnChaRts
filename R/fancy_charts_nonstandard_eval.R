@@ -24,4 +24,3 @@ ggplot_fancy_chart <- function(data = NA, chart_options = NA){
 
 # ## Call the function
 # fancy_chart(data = iris, library = "ggplot2", x.axis = ~Petal.Length, y.axis = ~Sepal.Length, send.arg = 5, receive.list = list(arg1 = 1))
-
