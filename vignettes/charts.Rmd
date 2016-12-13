@@ -166,7 +166,7 @@ stacked_bar_chart(data = sample_data,
                   categories.column = ~country,
                   categories.order = country_order,
                   subcategories.column = ~activity,
-                  value.column = ~hour,
+                  value.column = ~hours,
                   subcategories.order = activity_order,
                   stacking.type = "percent")
 ```

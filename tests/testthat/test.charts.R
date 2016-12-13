@@ -30,8 +30,8 @@ test_that("stacked_bar_chart(library='highcharter') makes a highchart object", {
   hc <- stacked_bar_chart(
     data = data_stacked_bar_chart,
     library = "highcharter",
-    categories.column = ~Countries,
-    value.column = ~hours
+    categories.column = ~Country,
+    value.column = ~hours,
     subcategories.column = ~activity,
     stacking.type = "percent"
   )
