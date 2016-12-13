@@ -78,7 +78,7 @@ hc_stacked_bar_chart <- function(data = NA,
     ) # select only columns in visualisation
 
   if (data %>% # if amny
-      select(f_text(optnl.args$categories.column), f_text(optnl.args$subcategories.column)) %>%
+      select_(f_text(optnl.args$categories.column), f_text(optnl.args$subcategories.column)) %>%
       duplicated() %>%
       any()) {
     print(
