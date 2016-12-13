@@ -79,6 +79,7 @@ hc_stacked_bar_chart <- function(data = NA,
   ## order category columns by categories_order
   wide_data <-
     wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]),]
+    wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]), ]
 
   data_columns <-
     setdiff(colnames(wide_data), f_text(optnl.args$categories.column))
