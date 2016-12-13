@@ -1,6 +1,5 @@
 # Recall that devtools::document()devtools::document() is necessary as shortcut Cmd+Shift+D not working
 
-
 #' Stacked Bar Chart.
 #'
 #' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
@@ -66,6 +65,8 @@ hc_stacked_bar_chart <- function(data = NA,
   } else {
     categories_order <- optnl.args$categories.order
   }
+
+  ## TODO: Check duplicates as otherwise spread_ complains
 
   ## make wide
   ungroup(data) %>%
