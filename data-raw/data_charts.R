@@ -1,5 +1,5 @@
 data_stacked_bar_chart <- data.frame(
-  "Country" = c(
+  "country" = c(
     "United Kingdom",
     "France",
     "Saudi Arabia",
