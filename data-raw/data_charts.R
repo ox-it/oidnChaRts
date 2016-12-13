@@ -1,6 +1,15 @@
 data_stacked_bar_chart <- data.frame(
-  "Countries" = c(
-    "United Kingdom","France","Saudi Arabia","Egypt","Germany","China","Slovakia","Canada","Estonia","Ireland"
+  "Country" = c(
+    "United Kingdom",
+    "France",
+    "Saudi Arabia",
+    "Egypt",
+    "Germany",
+    "China",
+    "Slovakia",
+    "Canada",
+    "Estonia",
+    "Ireland"
   ),
   "Business" =  c(8, 6, 7, 8, 9, 7, 9, 7, 9, 9),
   "Other" = c(22, 28, 11, 19, 11, 39, 22, 10, 30, 7),
@@ -10,15 +19,15 @@ data_stacked_bar_chart <- data.frame(
   stringsAsFactors = F
 )
 # Columns
-categories_column <- "Countries"
+categories_column <- "country"
 subcategories_column <- "activity"
 value_column <- "hours"
 # Convert to long-format
 data_stacked_bar_chart <- data_stacked_bar_chart %>%
-  gather(activity, hours, match(setdiff(colnames(data_stacked_bar_chart), categories_column), colnames(data_stacked_bar_chart)))
+  gather(activity, hours, match(
+    setdiff(colnames(data_stacked_bar_chart), categories_column),
+    colnames(data_stacked_bar_chart)
+  ))
 
 save(data_stacked_bar_chart,
      file = "data/data_stacked_bar_chart.rdata")
-
-
-

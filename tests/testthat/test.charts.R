@@ -15,17 +15,14 @@ data_stacked_bar_chart <- data.frame(
 
 library(tidyr)
 data_stacked_bar_chart <- gather(data_stacked_bar_chart,
-       "Activity",
-       "Hours",
+       "activity",
+       "hours",
        which(
          colnames(data_stacked_bar_chart) %in% setdiff(colnames(data_stacked_bar_chart), "Country")
        ))
 
-categories_column <- "Country"
 categories_order <- c("China","United Kingdom","France","Slovakia","Canada","Estonia","Ireland","Saudi Arabia","Egypt","Germany")
-subcategories_column <- "Activity"
 subcategories_order <- c("Personal", "Teleconference", "Unclassified", "Business", "Overlay")
-value_column <- "Hours"
 
 
 test_that("stacked_bar_chart(library='highcharter') makes a highchart object", {
@@ -33,9 +30,9 @@ test_that("stacked_bar_chart(library='highcharter') makes a highchart object", {
   hc <- stacked_bar_chart(
     data = data_stacked_bar_chart,
     library = "highcharter",
-    categories.column = categories_column,
-    value.column = "Hours",
-    subcategories.column = subcategories_column,
+    categories.column = ~Countries,
+    value.column = ~hours
+    subcategories.column = ~activity,
     stacking.type = "percent"
   )
 
@@ -50,10 +47,10 @@ test_that(
   chart <- stacked_bar_chart(
     data = data_stacked_bar_chart,
     library = "plotly",
-    categories.column = categories_column,
+    categories.column = ~Country,
     categories.order = categories_order,
-    value.column = "Hours",
-    subcategories.column = subcategories_column,
+    value.column = ~hours,
+    subcategories.column = ~activity,
     subcategories.order = subcategories_order
   )
 
