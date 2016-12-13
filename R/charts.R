@@ -81,10 +81,9 @@ hc_stacked_bar_chart <- function(data = NA,
       select_(f_text(optnl.args$categories.column), f_text(optnl.args$subcategories.column)) %>%
       duplicated() %>%
       any()) {
-    print(
+    stop(print(
       "There must NOT be duplicate entries for category/subcategory pairs, try converting the data to wide format yourself"
-    )
-    return()
+    ))
   }
 
 
