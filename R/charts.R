@@ -70,15 +70,33 @@ hc_stacked_bar_chart <- function(data = NA,
 
   ## TODO: Check duplicates as otherwise spread_ complains
 
+  data <- ungroup(data) %>%
+    select_(
+      f_text(optnl.args$value.column),
+      f_text(optnl.args$categories.column),
+      f_text(optnl.args$subcategories.column)
+    ) # select only columns in visualisation
+
+  if (data %>% # if amny
+      select(f_text(optnl.args$categories.column), f_text(optnl.args$subcategories.column)) %>%
+      duplicated() %>%
+      any()) {
+    print(
+      "There must NOT be duplicate entries for category/subcategory pairs, try converting the data to wide format yourself"
+    )
+    return()
+  }
+
+
+
   ## make wide
-  ungroup(data) %>%
+  data %>%
     spread_(f_text(optnl.args$subcategories.column),
             f_text(optnl.args$value.column)) %>%
     setNames(make.names(names(.))) -> wide_data
 
   ## order category columns by categories_order
   wide_data <-
-    wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]),]
     wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]), ]
 
   data_columns <-
