@@ -1,5 +1,9 @@
 # oidnChaRts
 
+[![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRtsR.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts)
+
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+
 A collection of functions for building generic interactive `htmlwidget` visualisations, primarily to compare library "A" vs "B" but also usable in their own right.
 
 Functions are in general called as follows:
