@@ -1,5 +1,3 @@
-library(stringr)
-context("String length")
 
 data_stacked_bar_chart <- data.frame(
   "Country" = c(
@@ -42,7 +40,7 @@ test_that("stacked_bar_chart(library='highcharter') makes a highchart object", {
 
 
 test_that(
-  "stacked_bar_chart(library='plotly') is not yet implemented", {
+  "stacked_bar_chart(library='plotly') makes a plotly object", {
 
   chart <- stacked_bar_chart(
     data = data_stacked_bar_chart,

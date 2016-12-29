@@ -80,3 +80,17 @@ geo_lines_map(data_geo_lines_map,
               line.options = list(weight = 3)) %>%
   addProviderTiles("Stamen.Watercolor")
 ```
+
+
+# Choropleth from points
+
+Our sample dataset is included in the library, `data_geo_points` and comprises a set of coordinates . The `geo_lines_map` function requires a dataset with at least the following columns:
+
+- sender.latitude
+- sender.longitude
+- receiver.latitude
+- receiver.longitude
+
+```{r}
+library(oidnChaRts)
+head(data_geo_lines_map)
