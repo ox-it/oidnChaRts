@@ -19,11 +19,18 @@
 }}
 \source{
 \url{http://www.idn.it.ox.ac.uk}
+
+\url{http://www.idn.it.ox.ac.uk}
 }
 \usage{
 data_geo_lines_map
+
+data_geo_lines_map
 }
 \description{
+A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
+The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.
+
 A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
 The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.
 }
