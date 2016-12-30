@@ -1,57 +1,160 @@
+test_that("stacked_bar_chart(library='highcharter') makes a highchart object",
+          {
+            hc <- stacked_bar_chart(
+              data = data_stacked_bar_chart,
+              library = "highcharter",
+              categories.column = ~ country,
+              value.column = ~ hours,
+              subcategories.column = ~ activity
+            )
 
-data_stacked_bar_chart <- data.frame(
-  "Country" = c(
-    "United Kingdom","France","Saudi Arabia","Egypt","Germany","China","Slovakia","Canada","Estonia","Ireland"
-  ),
-  "Business" =  c(8, 6, 7, 8, 9, 7, 9, 7, 9, 9),
-  "Overlay" = c(22, 28, 11, 19, 11, 39, 22, 10, 30, 7),
-  "Personal" = c(19, 21, 21, 20, 19, 19, 21, 21, 20, 20),
-  "Teleconference" = c(9, 29, 21, 44, 59, 11, 53, 16, 49, 36),
-  "Unclassified" = c(42, 48, 50, 45, 49, 40, 42, 47, 48, 44),
-  stringsAsFactors = F
-)
+            expect_true(all(class(hc) %in% c("highchart",  "htmlwidget")))
 
-library(tidyr)
-data_stacked_bar_chart <- gather(data_stacked_bar_chart,
-       "activity",
-       "hours",
-       which(
-         colnames(data_stacked_bar_chart) %in% setdiff(colnames(data_stacked_bar_chart), "Country")
-       ))
-
-categories_order <- c("China","United Kingdom","France","Slovakia","Canada","Estonia","Ireland","Saudi Arabia","Egypt","Germany")
-subcategories_order <- c("Personal", "Teleconference", "Unclassified", "Business", "Overlay")
-
-
-test_that("stacked_bar_chart(library='highcharter') makes a highchart object", {
-
-  hc <- stacked_bar_chart(
-    data = data_stacked_bar_chart,
-    library = "highcharter",
-    categories.column = ~Country,
-    value.column = ~hours,
-    subcategories.column = ~activity,
-    stacking.type = "percent"
-  )
-
-  expect_true(all(class(hc) %in% c("highchart",  "htmlwidget")))
-
-})
-
+          })
 
 test_that(
-  "stacked_bar_chart(library='plotly') makes a plotly object", {
+  "stacked_bar_chart(library='highcharter', return.data = TRUE) returns a data.frame",
+  {
+    hc <- stacked_bar_chart(
+      data = data_stacked_bar_chart,
+      library = "highcharter",
+      categories.column = ~ country,
+      value.column = ~ hours,
+      subcategories.column = ~ activity,
+      return.data = TRUE
+    )
 
+    expect_true(all(class(hc) %in% c("data.frame")))
+
+  }
+)
+
+
+test_that("stacked_bar_chart(library='plotly') makes a plotly object", {
   chart <- stacked_bar_chart(
     data = data_stacked_bar_chart,
     library = "plotly",
-    categories.column = ~Country,
-    categories.order = categories_order,
-    value.column = ~hours,
-    subcategories.column = ~activity,
-    subcategories.order = subcategories_order
+    categories.column = ~ country,
+    value.column = ~ hours,
+    subcategories.column = ~ activity
   )
 
   expect_true(all(class(chart) %in% c("plotly",  "htmlwidget")))
+})
+
+test_that("stacked_bar_chart(library='plotly', stacking.type) makes a plotly object", {
+  chart <- stacked_bar_chart(
+    data = data_stacked_bar_chart,
+    library = "plotly",
+    categories.column = ~ country,
+    value.column = ~ hours,
+    subcategories.column = ~ activity,
+    stacking.type = "percent"
+  )
+
+  expect_true(all(class(chart) %in% c("plotly",  "htmlwidget")))
+})
+
+test_that("stacked_bar_chart(library='highcharter', stacking.type) makes a highcharter object", {
+  chart <- stacked_bar_chart(
+    data = data_stacked_bar_chart,
+    library = "highcharter",
+    categories.column = ~ country,
+    value.column = ~ hours,
+    subcategories.column = ~ activity,
+    stacking.type = "percent"
+  )
+
+  expect_true(all(class(chart) %in% c("highchart",  "htmlwidget")))
+})
+
+test_that(
+  "stacked_bar_chart(library='highcharter', categories.order, subcategories.order) makes a highchart object",
+  {
+    activity_order <-
+      c("Unclassified",
+        "Business",
+        "Overlay",
+        "Personal Visit",
+        "Teleconference")
+    country_order <-
+      c(
+        "Canada",
+        "China",
+        "Egypt",
+        "Estonia",
+        "France",
+        "Germany",
+        "Ireland",
+        "Saudi Arabia",
+        "Slovakia",
+        "United Kingdom"
+      )
+
+    hc <- stacked_bar_chart(
+      data = data_stacked_bar_chart,
+      library = "highcharter",
+      categories.column = ~ country,
+      categories.order = country_order,
+      subcategories.column = ~ activity,
+      value.column = ~ hours,
+      subcategories.order = activity_order,
+      stacking.type = "percent"
+    )
+
+
+    expect_true(all(class(hc) %in% c("highchart",  "htmlwidget")))
+
+  }
+)
+
+test_that(
+  "stacked_bar_chart(library='plotly', categories.order, subcategories.order) makes a plotly object",
+  {
+    activity_order <-
+      c("Unclassified",
+        "Business",
+        "Overlay",
+        "Personal Visit",
+        "Teleconference")
+    country_order <-
+      c(
+        "Canada",
+        "China",
+        "Egypt",
+        "Estonia",
+        "France",
+        "Germany",
+        "Ireland",
+        "Saudi Arabia",
+        "Slovakia",
+        "United Kingdom"
+      )
+
+    hc <- stacked_bar_chart(
+      data = data_stacked_bar_chart,
+      library = "plotly",
+      categories.column = ~ country,
+      categories.order = country_order,
+      subcategories.column = ~ activity,
+      value.column = ~ hours,
+      subcategories.order = activity_order
+    )
+
+
+    expect_true(all(class(hc) %in% c("plotly",  "htmlwidget")))
+
+  }
+)
+
+test_that(
+  "stacked_bar_chart(library='foobar') returns a warning that this library is not currently supported",
+  {
+    expect_error(
+      stacked_bar_chart(data = data_stacked_bar_chart,
+                        library = "foobar"),
+      "The selected library is not supported, choose from; leaflet or plotly"
+    )
+
   }
 )
