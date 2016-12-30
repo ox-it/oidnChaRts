@@ -91,40 +91,40 @@ leaflet_geo_lines_map <- function(data = NA,
 }
 
 
-
+## TODO: Generalise addLegendCustom
 #' addLegendCustom
-addLegendCustom <-
-  function(map, colors, labels, sizes, opacity = 0.5) {
-    ## Inspired by http://stackoverflow.com/a/37482936/1659890
-    colorAdditions <-
-      paste0(colors, "; width:", sizes, "px; height:", sizes, "px")
-    labelAdditions <-
-      paste0(
-        "<div style='display: inline-block;height: ",
-        sizes,
-        "px;margin-top: 4px;line-height: ",
-        sizes,
-        "px;'>",
-        labels,
-        "</div>"
-      )
-
-    return(addLegend(
-      map,
-      colors = colorAdditions,
-      labels = labelAdditions,
-      opacity = opacity
-    ))
-  }
-
-#' leaflet_termini_legend
-leaflet_termini_legend <- function(map = NA,
-                                   colors = NA,
-                                   optnl.args = NA) {
-  map %>%
-    addLegendCustom(
-      colors = c("#fdae61", "#d7191c"),
-      labels = c("Sender", "Receiver"),
-      sizes = c(10, 10)
-    )
-}
+# addLegendCustom <-
+#   function(map, colors, labels, sizes, opacity = 0.5) {
+#     ## Inspired by http://stackoverflow.com/a/37482936/1659890
+#     colorAdditions <-
+#       paste0(colors, "; width:", sizes, "px; height:", sizes, "px")
+#     labelAdditions <-
+#       paste0(
+#         "<div style='display: inline-block;height: ",
+#         sizes,
+#         "px;margin-top: 4px;line-height: ",
+#         sizes,
+#         "px;'>",
+#         labels,
+#         "</div>"
+#       )
+#
+#     return(addLegend(
+#       map,
+#       colors = colorAdditions,
+#       labels = labelAdditions,
+#       opacity = opacity
+#     ))
+#   }
+#
+# #' leaflet_termini_legend
+# leaflet_termini_legend <- function(map = NA,
+#                                    colors = NA,
+#                                    optnl.args = NA) {
+#   map %>%
+#     addLegendCustom(
+#       colors = c("#fdae61", "#d7191c"),
+#       labels = c("Sender", "Receiver"),
+#       sizes = c(10, 10)
+#     )
+# }

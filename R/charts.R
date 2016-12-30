@@ -1,5 +1,3 @@
-# Recall that devtools::document()devtools::document() is necessary as shortcut Cmd+Shift+D not working
-
 #' Stacked Bar Chart.
 #'
 #' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
@@ -24,6 +22,7 @@
 #'  it is perfectly possible breaking changes to the library and/or the underling JavaScript library will
 #'  break these. In such case, refer to http://ox-it.github.io/OxfordIDN_htmlwidgets for generic tutorials on
 #' the widely used htmlwidget libraries and how to select an alternative visualisation library.
+#'
 #' @export
 stacked_bar_chart <- function(data = NA,
                               library = "highcharter",

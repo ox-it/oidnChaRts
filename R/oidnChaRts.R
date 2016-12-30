@@ -2,6 +2,12 @@
 #'
 #' The package contains functions for creating the following types of data visualisations:
 #' Charts, Maps, Networks
+#' @import dplyr
+#' @import lazyeval
+#' @import tidyr
+#' @import leaflet
+#' @import highcharter
+#' @import plotly
 #'
 #' @section Chart functions:
 #' stacked_bar_chart

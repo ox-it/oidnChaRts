@@ -8,11 +8,10 @@ Description: Provides templates for standard chart types built with htmlwidget
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
-    gapminder
-Depends:
     lazyeval,
     dplyr (>= 0.3.0.1),
     tidyr,
+    leaflet,
     highcharter,
     plotly
 URL: http://ox-it.github.io/OxfordIDN_htmlwidgets

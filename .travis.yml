@@ -3,3 +3,10 @@
 language: R
 sudo: false
 cache: packages
+
+r_github_packages:
+  - jimhester/covr
+  - ox-it/oidnChaRts
+
+after_success:
+  - Rscript -e 'library(covr);codecov()'
