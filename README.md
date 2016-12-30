@@ -2,6 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRtsR.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+[![Codecov](https://img.shields.io/codecov/c/github/ox-it/oidnChaRts.svg)](https://codecov.io/gh/ox-it/oidnChaRts)
 
 A collection of functions for building generic interactive `htmlwidget` visualisations, primarily to compare library "A" vs "B" but also usable in their own right.
 
