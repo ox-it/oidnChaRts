@@ -27,14 +27,6 @@ Hat tip to [http://personal.tcu.edu/kylewalker/interactive-flow-visualization-in
 
 ## Leaflet
 
-### Dependencies
-
-The `data_geo_lines_map` function when using `library = "leaflet"` is dependent on the `geospheres` library for `gcIntersect`, this must be installed separately but is available from CRAN with `install.packages("geosphere")`.
-
-```{r}
-library(geosphere)
-```
-
 ### Basic Example
 
 The minimal number of arguments required for `geo_line_map` are as follows:
