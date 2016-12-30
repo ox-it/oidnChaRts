@@ -2,20 +2,45 @@
 #'
 #' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 #'
+#' @import htmlwidgets
+#' @importFrom stats as.formula
+#' @rdname map-stacked-bar-chart
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
 #' @param categories.column  Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels. Must be given as formula, i.e. ~country
-#' @param categories.order Order for categories
+#' @param categories.order Order for categories to appear in the bar chart, a character vector containing as many unique
+#' categories as there ar in \code{data}. For \code{data_stacked_bar_chart} the order might be c("United Kingdom",
+#' "Canada", "China", "Estonia", "Egypt", "France", "Germany", "Ireland", "Saudi Arabia", "Slovakia").
+#' Default to NA, the categories order will be determined by their appearance in \code{data}.
 #' @param subcategories.column Column containing different measures, i.e sub-categorisations. Must be given as formula, i.e. ~country
 #' @param value.column Column containing bar values, i.e. lengths. Must be given as formula, i.e. ~country
 #' @param stacking.type Stacking to apply to bars, default NULL. Possible values, c("percent", "normal")
 #' @param subcategories.order Order for sub-categories, note for plotly the legend is ordered correctly but bars are reverse ordered
+#' @param return.data Useful tool for debugging libraries that perform internal data wrangling, for instance highcharter. If TRUE the function will return the restructured data provided to the htmlwidget generating the output. Default to FALSE.
 #'
 #' @return Stacked bar chart of the class specified by the specified library.
 #' @examples
 #' \dontrun{
-#' stacked_bar_chart(1, 1)
-#' stacked_bar_chart(1, "foo")
+#' ## Generate a stacked bar chart using highcharter
+#' stacked_bar_chart(data = data_stacked_bar_chart,
+#' library = "highcharter",
+#' categories.column = ~country,
+#' subcategories.column = ~activity,
+#' value.column = ~hours)
+#'
+#' ## Generate a staced bar chart with bars stacked such that the subcategories totals within a
+#' ## category sum to 100%, using plotly.
+#' activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
+#' country_order <- c("Canada", "China", "Egypt", "Estonia", "France", "Germany", "Ireland",
+#' "Saudi Arabia", "Slovakia", "United Kingdom")
+#'stacked_bar_chart(data = data_stacked_bar_chart,
+#'                library = "plotly",
+#'                categories.column = ~country,
+#'                categories.order = country_order,
+#'                subcategories.column = ~activity,
+#'                value.column = ~hours,
+#'                subcategories.order = activity_order,
+#'                stacking.type = "percent")
 #' }
 #'
 #' @section Warning: These should be considered utility functions only, the magic is contained within the htmlwidget library,
@@ -24,12 +49,12 @@
 #' the widely used htmlwidget libraries and how to select an alternative visualisation library.
 #'
 #' @export
-stacked_bar_chart <- function(data = NA,
+stacked_bar_chart <- function(data,
                               library = "highcharter",
-                              categories.column = NA,
+                              categories.column,
                               categories.order = NA,
-                              subcategories.column = NA,
-                              value.column = NA,
+                              subcategories.column,
+                              value.column,
                               stacking.type = NA,
                               subcategories.order = NA,
                               return.data = FALSE) {
@@ -40,44 +65,47 @@ stacked_bar_chart <- function(data = NA,
     ))
   }
 
-  optnl.args <-
+  viz.args <-
     mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
 
   switch (
     library,
-    "highcharter" = hc_stacked_bar_chart(data = data,
-                                         optnl.args = optnl.args),
+    "highcharter" = hc_stacked_bar_chart(viz.args),
     "plotly" = {
-      plotly_stacked_bar_chart(data = data,
-                               optnl.args = optnl.args)
+      plotly_stacked_bar_chart(viz.args)
     }
   )
 }
 
-#' highchart bar chart
-hc_stacked_bar_chart <- function(data = NA,
-                                 optnl.args = NA) {
-  ## Compute categories.order, if necessary
+#' \code{hc_stacked_bar_chart} should not be used directly, it generates a stacked barchart using Plotly.
+#' @rdname map-stacked-bar-chart
+#' @param ... all arguments other than \code{data} and \code{library} provided to \code{stacked_bar_chart}.
+hc_stacked_bar_chart <- function(...) {
 
-  if (any(is.na(optnl.args$categories.order))) {
-    categories_order <- f_eval(optnl.args$categories.column, data) %>%
+  viz.args <- list(...)[[1]]
+  data <- viz.args$data
+
+  ## Compute categories.order, if necessary
+  if (any(is.na(viz.args$categories.order))) {
+    categories_order <- f_eval(viz.args$categories.column, data) %>%
       unique() %>%
       unlist(use.names = FALSE)
   } else {
-    categories_order <- optnl.args$categories.order
+    categories_order <- viz.args$categories.order
   }
 
-  ## TODO: Check duplicates as otherwise spread_ complains
+
 
   data <- ungroup(data) %>%
     select_(
-      f_text(optnl.args$value.column),
-      f_text(optnl.args$categories.column),
-      f_text(optnl.args$subcategories.column)
+      f_text(viz.args$value.column),
+      f_text(viz.args$categories.column),
+      f_text(viz.args$subcategories.column)
     ) # select only columns in visualisation
 
-  if (data %>% # if amny
-      select_(f_text(optnl.args$categories.column), f_text(optnl.args$subcategories.column)) %>%
+  ## TODO: Add an appropriate testthat
+  if (data %>% # if any duplicated
+      select_(f_text(viz.args$categories.column), f_text(viz.args$subcategories.column)) %>%
       duplicated() %>%
       any()) {
     stop(print(
@@ -85,30 +113,29 @@ hc_stacked_bar_chart <- function(data = NA,
     ))
   }
 
-
-
   ## make wide
-  data %>%
-    spread_(f_text(optnl.args$subcategories.column),
-            f_text(optnl.args$value.column)) %>%
-    setNames(make.names(names(.))) -> wide_data
+  wide_data <- data %>%
+    spread_(f_text(viz.args$subcategories.column),
+            f_text(viz.args$value.column))
+
+  wide_data <- stats::setNames(wide_data, make.names(names(wide_data)))
 
   ## order category columns by categories_order
   wide_data <-
-    wide_data[match(categories_order, wide_data[[f_text(optnl.args$categories.column)]]), ]
+    wide_data[match(categories_order, wide_data[[f_text(viz.args$categories.column)]]), ]
 
   data_columns <-
-    setdiff(colnames(wide_data), f_text(optnl.args$categories.column))
+    setdiff(colnames(wide_data), f_text(viz.args$categories.column))
 
-  subcategories_order <- make.names(optnl.args$subcategories.order)
+  subcategories_order <- make.names(viz.args$subcategories.order)
 
-  if (optnl.args$return.data) {
+  if (viz.args$return.data) {
     return(wide_data)
   }
 
   chart <-
     highchart() %>% hc_xAxis(categories = categories_order,
-                             title = f_text(optnl.args$categories.column))
+                             title = f_text(viz.args$categories.column))
 
   invisible(lapply(data_columns, function(x) {
     chart <<-
@@ -118,14 +145,14 @@ hc_stacked_bar_chart <- function(data = NA,
         data = wide_data %>% select_(x) %>% unlist(use.names = F),
         index = {
           if (any(is.na(subcategories_order))) {
-            if (is.na(optnl.args$stacking.type)) {
+            if (is.na(viz.args$stacking.type)) {
               length(subcategories_order) - which(subcategories_order == x) - 1
             } else {
               which(subcategories_order == x) - 1
             }
           } else
 
-            if (is.na(optnl.args$stacking.type)) {
+            if (is.na(viz.args$stacking.type)) {
               length(subcategories_order) - which(rev(subcategories_order) == x) - 1
             } else {
               which(rev(subcategories_order) == x) - 1
@@ -137,49 +164,53 @@ hc_stacked_bar_chart <- function(data = NA,
 
   chart %>%
     hc_chart(type = "bar") %>%
-    hc_plotOptions(series = list(stacking = as.character(optnl.args$stacking.type))) %>%
-    hc_legend(reversed = ifelse(is.na(optnl.args$stacking.type), FALSE, TRUE))
+    hc_plotOptions(series = list(stacking = as.character(viz.args$stacking.type))) %>%
+    hc_legend(reversed = ifelse(is.na(viz.args$stacking.type), FALSE, TRUE))
 
 }
 
-#' Plotly Stacked Bar Chart.
-plotly_stacked_bar_chart <- function(data = NA,
-                                     optnl.args = NA) {
-  # sample_data %>% gather_("Activity", "Days", setdiff(colnames(sample_data), "Countries"))
+#' \code{plotly_stacked_bar_chart} should not be used directly, it generates a stacked barchart using Plotly.
+#' @rdname map-stacked-bar-chart
+plotly_stacked_bar_chart <- function(...) {
 
+  viz.args <- list(...)[[1]]
+  viz.args <- list(...)[[1]]
+  data <- viz.args$data
+
+  # sample_data %>% gather_("Activity", "Days", setdiff(colnames(sample_data), "Countries"))
   plot_data <- data
 
-  if (!any(is.na(optnl.args$subcategories.order))) {
+  if (!any(is.na(viz.args$subcategories.order))) {
     ## grouped bars do not reverse the legend, but does reverse bar order
-    if (is.na(optnl.args$stacking.type)) {
-      plot_data[, f_text(optnl.args$subcategories.column)] <-
-        factor(plot_data[, f_text(optnl.args$subcategories.column)], levels = optnl.args$subcategories.order)
+    if (is.na(viz.args$stacking.type)) {
+      plot_data[, f_text(viz.args$subcategories.column)] <-
+        factor(plot_data[, f_text(viz.args$subcategories.column)], levels = viz.args$subcategories.order)
     }
   } else {
     ## allow automated ordering
     plot_data
   }
 
-  if (!any(is.na(optnl.args$categories.order))) {
-    plot_data[, f_text(optnl.args$categories.column)] <-
-      factor(plot_data[, f_text(optnl.args$categories.column)], levels = rev(optnl.args$categories.order))
+  if (!any(is.na(viz.args$categories.order))) {
+    plot_data[, f_text(viz.args$categories.column)] <-
+      factor(plot_data[, f_text(viz.args$categories.column)], levels = rev(viz.args$categories.order))
   }
 
   chart <- plot_ly(
     data = plot_data,
     type = "bar",
-    y = optnl.args$categories.column,
-    x = optnl.args$value.column,
-    color = optnl.args$subcategories.column,
+    y = viz.args$categories.column,
+    x = viz.args$value.column,
+    color = viz.args$subcategories.column,
     orientation = "h"
   ) %>%
-    layout(xaxis = list(title = f_text(optnl.args$value.column)),
-           yaxis = list(title = f_text(optnl.args$categories.column)))
+    layout(xaxis = list(title = f_text(viz.args$value.column)),
+           yaxis = list(title = f_text(viz.args$categories.column)))
 
-  if (is.na(optnl.args$stacking.type)) {
+  if (is.na(viz.args$stacking.type)) {
     chart
   } else {
     chart %>%
-      layout(barmode = "stack", barnorm = optnl.args$stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
+      layout(barmode = "stack", barnorm = viz.args$stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
   }
 }

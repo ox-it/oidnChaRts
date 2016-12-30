@@ -2,6 +2,7 @@
 #'
 #' \code{geo_lines_map} creates a map with lines (great circles) between geo graphic locations using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 #'
+#' @rdname map-geo-lines-map
 #' @param data A data.frame with sender-receiver pairs, needs the following columns
 #' \itemize{
 #'  \item{"sender.longitude"}{ : sender longitude}
@@ -10,13 +11,19 @@
 #'  \item{"receiver.latitude"}{ : receiver latitude}
 #'  }
 #'
-#'  @param library must be one of the supported libraries, currently; "leaflet". Defaults to "leaflet".
-#'  @param line.color color for the geolines (great circles), defaults to #2c7bb6
-#'  @param line.popup expression used to populate popups displayed when a geoline is clicked, can use models/formula. For instance, ~paste(sender.longitude, receiver.longitude)
-#'  @param sender.color color of the dots representing sender locations, defaults to #fdae61
-#'  @param receiver.color color of the dots representing receiver locations, defaults to #d7191c
-#'  @param line.options named list of options for geolines
-#'  @param termini.options named list of options for the termini (sender/receiver dots)
+#' @param library must be one of the supported libraries, currently; "leaflet". Defaults to "leaflet".
+#' @param line.color color for the geolines (great circles), defaults to #2c7bb6
+#' @param line.popup expression used to populate popups displayed when a geoline is clicked, can use models/formula. For instance, ~paste(sender.longitude, receiver.longitude)
+#' @param sender.color color of the dots representing sender locations, defaults to #fdae61
+#' @param receiver.color color of the dots representing receiver locations, defaults to #d7191c
+#' @param line.options named list of options for geolines
+#' @param termini.options named list of options for the termini (sender/receiver dots)
+#' \itemize{
+#'   \item{sender.fill}{ : Fill sender termini? TRUE or FALSE, default FALSE.}
+#'   \item{receiver.fill}{ : Fill receiver termini? TRUE or FALSE, default TRUE.}
+#'   \item{sender.radius}{ : size of sender termini.}
+#'   \item{receiver.radius}{ : size of sender termini.}
+#'  }
 #'
 #' @export
 geo_lines_map <-
@@ -38,21 +45,26 @@ geo_lines_map <-
       stop(paste("The selected library is not supported, choose from; leaflet."))
     }
 
-    optnl.args <-
+    viz.args <-
       mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
     switch(library,
-           "leaflet" = leaflet_geo_lines_map(data = data,
-                                             optnl.args = optnl.args))
+           "leaflet" = leaflet_geo_lines_map(viz.args))
   }
 
-#' leaflet_geo_lines_map
-leaflet_geo_lines_map <- function(data = NA,
-                                  optnl.args = NA) {
-  geo_lines <- gcIntermediate(
+
+#' \code{leaflet_geo_lines_map} should not be used directly, it generates a map with great circles between points using Leaflet.
+#' @rdname map-geo-lines-map
+#' @param ... all arguments other than \code{data} and \code{library} provided to \code{geo_lines_map}.
+leaflet_geo_lines_map <- function(...) {
+
+  viz.args <- list(...)[[1]]
+  data <- viz.args$data
+
+  geo_lines <- geosphere::gcIntermediate(
     data %>%
-      select(sender.longitude, sender.latitude),
+      select_("sender.longitude", "sender.latitude"),
     data %>%
-      select(receiver.longitude, receiver.latitude),
+      select_("receiver.longitude", "receiver.latitude"),
     sp = TRUE,
     addStartEnd = TRUE
   )
@@ -61,31 +73,31 @@ leaflet_geo_lines_map <- function(data = NA,
     addTiles() %>%
     addPolylines(
       data = geo_lines,
-      color = optnl.args$line.color,
-      popup = if (is.null(optnl.args$line.popup)) {
+      color = viz.args$line.color,
+      popup = if (is.null(viz.args$line.popup)) {
         NULL
       } else
-        f_eval(optnl.args$line.popup, data),
-      weight = optnl.args$line.options$weight
+        f_eval(viz.args$line.popup, data),
+      weight = viz.args$line.options$weight
     ) %>%
     addCircleMarkers(
       data = data,
-      lng = ~ sender.longitude,
-      lat = ~ sender.latitude,
-      fill = optnl.args$termini.options$sender.fill,
-      radius = optnl.args$termini.options$sender.radius,
+      lng = as.formula("~sender.longitude"),
+      lat = as.formula("~sender.latitude"),
+      fill = viz.args$termini.options$sender.fill,
+      radius = viz.args$termini.options$sender.radius,
       stroke = TRUE,
-      color = optnl.args$sender.color,
+      color = viz.args$sender.color,
       opacity = 0.6
     ) %>%
     addCircleMarkers(
       data = data,
-      lng = ~ receiver.longitude,
-      lat = ~ receiver.latitude,
-      fill = optnl.args$termini.options$receiver.fill,
-      radius = optnl.args$termini.options$receiver.radius,
+      lng = as.formula("~receiver.longitude"),
+      lat = as.formula("~receiver.latitude"),
+      fill = viz.args$termini.options$receiver.fill,
+      radius = viz.args$termini.options$receiver.radius,
       stroke = TRUE,
-      color = optnl.args$receiver.color,
+      color = viz.args$receiver.color,
       opacity = 0.6
     )
 }
@@ -120,7 +132,7 @@ leaflet_geo_lines_map <- function(data = NA,
 # #' leaflet_termini_legend
 # leaflet_termini_legend <- function(map = NA,
 #                                    colors = NA,
-#                                    optnl.args = NA) {
+#                                    viz.args = NA) {
 #   map %>%
 #     addLegendCustom(
 #       colors = c("#fdae61", "#d7191c"),
