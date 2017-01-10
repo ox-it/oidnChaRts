@@ -20,6 +20,8 @@ rcharts_calendar_map(...)
 Stacked bar chart of the class specified by the specified library.
 }
 \description{
+\code{calendar_heatmap} creates a calendar heatmap using the specified library, which can be used in the library's \code{\%>\%} workflow. Data must be provided in long format.
+
 \code{rcharts_calendar_map} should not be used directly, it generates a calendar heatmap using rCharts.
 }
 \section{Warning}{

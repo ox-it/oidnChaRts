@@ -40,8 +40,6 @@ Default to NA, the categories order will be determined by their appearance in \c
 \item{return.data}{Useful tool for debugging libraries that perform internal data wrangling, for instance highcharter. If TRUE the function will return the restructured data provided to the htmlwidget generating the output. Default to FALSE.}
 
 \item{...}{all arguments other than \code{data} and \code{library} provided to \code{stacked_bar_chart}.}
-
-\item{...}{all arguments other than \code{data} and \code{library} provided to \code{stacked_bar_chart}.}
 }
 \value{
 Stacked bar chart of the class specified by the specified library.

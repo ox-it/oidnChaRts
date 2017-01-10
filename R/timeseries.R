@@ -1,9 +1,9 @@
 #' Calendar Heatmap.
 #'
-#' \code{calendar_heatmap} creates a calendar heatmap using the specified library, which can be used in the library's \code{%>%} workflow. Data must be provided in long format.
+#' \code{calendar_heatmap} creates a calendar heatmap using the specified library, which can be used in the library's \code{\%>\%} workflow. Data must be provided in long format.
 #'
 #' @import htmlwidgets
-#' @import googleVis
+#' @importFrom googleVis gvisCalendar
 #' @rdname map-calendar-heatmap
 #' @param data Date to be included in the heatmap
 #' @param library Which library to use, googleViz is default.
