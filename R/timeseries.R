@@ -10,7 +10,7 @@
 #' @return Stacked bar chart of the class specified by the specified library.
 #' @section Warning: These should be considered utility functions only, the magic is contained within the htmlwidget library,
 #'  it is perfectly possible breaking changes to the library and/or the underling JavaScript library will
-#'  break these. In such case, refer to http://ox-it.github.io/OxfordIDN_htmlwidgets for generic tutorials on
+#'  break these. In such case, refer to http://martinjhnhadley.github.io/OxfordIDN_htmlwidgets for generic tutorials on
 #' the widely used htmlwidget libraries and how to select an alternative visualisation library.
 #'
 #' @export

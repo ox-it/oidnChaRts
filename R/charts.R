@@ -45,7 +45,7 @@
 #'
 #' @section Warning: These should be considered utility functions only, the magic is contained within the htmlwidget library,
 #'  it is perfectly possible breaking changes to the library and/or the underling JavaScript library will
-#'  break these. In such case, refer to http://ox-it.github.io/OxfordIDN_htmlwidgets for generic tutorials on
+#'  break these. In such case, refer to http://martinjhnhadley.github.io/OxfordIDN_htmlwidgets for generic tutorials on
 #' the widely used htmlwidget libraries and how to select an alternative visualisation library.
 #'
 #' @export
@@ -211,6 +211,6 @@ plotly_stacked_bar_chart <- function(...) {
     chart
   } else {
     chart %>%
-      layout(barmode = "stack", barnorm = viz.args$stacking.type) # See issue logger https://github.com/ox-it/oidnChaRts/issues/1
+      layout(barmode = "stack", barnorm = viz.args$stacking.type) # See issue logger https://github.com/martinjhnhadley/oidnChaRts/issues/1
   }
 }
