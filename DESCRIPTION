@@ -16,6 +16,7 @@ Imports:
     tidyr,
     geosphere,
     htmlwidgets,
+    googleVis,
     leaflet,
     highcharter,
     plotly

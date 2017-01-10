@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 # oidnChaRts
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/oidnChaRts)](https://cran.r-project.org/package=oidnChaRts)
-[![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRtsR.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts)
+[![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRts.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 [![Codecov](https://img.shields.io/codecov/c/github/ox-it/oidnChaRts.svg)](https://codecov.io/gh/ox-it/oidnChaRts)
 
