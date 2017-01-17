@@ -79,6 +79,7 @@ stacked_bar_chart <- function(data,
 
 #' \code{hc_stacked_bar_chart} should not be used directly, it generates a stacked barchart using Plotly.
 #' @rdname map-stacked-bar-chart
+#' @param ... all arguments provided to \code{stacked_bar_chart}.
 hc_stacked_bar_chart <- function(...) {
 
   viz.args <- list(...)[[1]]

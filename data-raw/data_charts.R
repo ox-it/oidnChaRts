@@ -34,11 +34,14 @@ save(data_stacked_bar_chart,
 
 library(tidyverse)
 
+## ======================== data_line_chart
+
 data_line_chart <- read_tsv("data-raw/thesaurus.fig2.tsv")
 colnames(data_line_chart) <- tolower(colnames(data_line_chart))
 
 line_colours_scheme <- read_csv("data-raw/color_scheme.csv")
-colnames(line_colours_scheme) <- tolower(make.names(colnames(line_colours_scheme)))
+colnames(line_colours_scheme) <-
+  tolower(make.names(colnames(line_colours_scheme)))
 
 data_line_chart <- data_line_chart %>%
   mutate(color = plyr::mapvalues(series,
@@ -47,4 +50,18 @@ data_line_chart <- data_line_chart %>%
 
 save(data_line_chart,
      file = "data/data_line_chart.rdata")
+
+## ======================== data_line_chart
+
+data_scatter_plot <- data.frame(
+  x = rnorm(100),
+  y = rnorm(100),
+  group = rep(c("A","B","C","D"), 25),
+  color = rep(c(rgb(0, 1, 0, 0.1), rgb(1, 1, 0, 0.1), rgb(0, 1, 1, 0.1), rgb(0, 0, 1, 0.1)), 25)
+) %>%
+  as_data_frame()
+
+save(data_scatter_plot,
+     file = "data/data_scatter_plot.rdata")
+
 

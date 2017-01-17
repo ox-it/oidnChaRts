@@ -2,9 +2,10 @@
 #'
 #' \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 #'
-#' @rdname map-line_chart
+#' @rdname map-line-chart
 #' @import htmlwidgets
 #' @importFrom stats as.formula
+#' @importFrom stats na.omit
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
 #' @param x.column Column containing x-coordinates for data points
@@ -36,7 +37,8 @@ line_chart <- function(data = NA,
 }
 
 #' \code{hc_line_chart} should not be used directly, it generates a stacked barchart using Plotly.
-#' @rdname map-line_chart
+#' @rdname map-line-chart
+#' @param ... all arguments provided to \code{line_chart}.
 hc_line_chart <- function(...) {
 
   viz.args <- list(...)[[1]]
@@ -72,11 +74,11 @@ hc_line_chart <- function(...) {
                x.column = f_text(viz.args$x.column),
                trace = safe.series.name,
                color = trace_details %>%
-                 filter(safe.name == safe.series.name) %>%
+                 filter_("safe.name" == safe.series.name) %>%
                  select(color) %>%
                  .[[1]],
                name = trace_details %>%
-                 filter(safe.name == safe.series.name) %>%
+                 filter_("safe.name" == safe.series.name) %>%
                  select(name) %>%
                  .[[1]]
              )

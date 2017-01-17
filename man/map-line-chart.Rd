@@ -15,7 +15,13 @@ hc_line_chart(...)
 
 \item{library}{Which library to use, highchart is default.}
 
-\item{categories.column}{Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels. Must be given as formula, i.e. ~country}
+\item{x.column}{Column containing x-coordinates for data points}
+
+\item{y.column}{Column containing y-cordinates for data points}
+
+\item{traces.column}{Column containing the traces/trace names}
+
+\item{markers}{Show plot markers on lines? TRUE or FALSE.}
 }
 \description{
 \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
