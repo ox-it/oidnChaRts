@@ -17,7 +17,7 @@
 data_stacked_bar_chart
 }
 \description{
-A (wide-formatted) dataset designed to demonstrate different options for stacked bar charts.
+A (long-formatted) dataset designed to demonstrate different options for stacked bar charts.
 }
 \keyword{datasets}
 

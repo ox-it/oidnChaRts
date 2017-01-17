@@ -1,6 +1,6 @@
 #' Stacked bar chart data
 #'
-#' A (wide-formatted) dataset designed to demonstrate different options for stacked bar charts.
+#' A (long-formatted) dataset designed to demonstrate different options for stacked bar charts.
 #'
 #' @format A data frame with 10 rows and 6 variables:
 #' \describe{
@@ -10,6 +10,21 @@
 #' }
 #' @source \url{http://www.diamondse.info/}
 "data_stacked_bar_chart"
+
+#' Line chart data
+#'
+#' A (long-formatted) dataset designed to demonstrate different options for line charts.
+#'
+#' @format A data frame with 35 rows and 4 variables:
+#' \describe{
+#'   \item{series}{Different series (analagous to different traces/lines in the chart)}
+#'   \item{af}{x-values in sample charts}
+#'   \item{fdr}{y-values in sample charts}
+#'   \item{tpr}{y-values in sample charts}
+#'   \item{color}{color for the trace/line}
+#' }
+#' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
+"data_line_chart"
 
 #' Geolines data
 #'

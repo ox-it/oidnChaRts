@@ -31,3 +31,20 @@ data_stacked_bar_chart <- data_stacked_bar_chart %>%
 
 save(data_stacked_bar_chart,
      file = "data/data_stacked_bar_chart.rdata")
+
+library(tidyverse)
+
+data_line_chart <- read_tsv("data-raw/thesaurus.fig2.tsv")
+colnames(data_line_chart) <- tolower(colnames(data_line_chart))
+
+line_colours_scheme <- read_csv("data-raw/color_scheme.csv")
+colnames(line_colours_scheme) <- tolower(make.names(colnames(line_colours_scheme)))
+
+data_line_chart <- data_line_chart %>%
+  mutate(color = plyr::mapvalues(series,
+                                 line_colours_scheme$name,
+                                 line_colours_scheme$colour))
+
+save(data_line_chart,
+     file = "data/data_line_chart.rdata")
+

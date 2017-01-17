@@ -3,6 +3,7 @@
 #' \code{geo_lines_map} creates a map with lines (great circles) between geo graphic locations using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 #'
 #' @rdname map-geo-lines-map
+#' @import htmltools
 #' @param data A data.frame with sender-receiver pairs, needs the following columns
 #' \itemize{
 #'  \item{"sender.longitude"}{ : sender longitude}
@@ -17,6 +18,7 @@
 #' @param sender.color color of the dots representing sender locations, defaults to #fdae61
 #' @param receiver.color color of the dots representing receiver locations, defaults to #d7191c
 #' @param line.options named list of options for geolines
+#' @param termini.legend include a legend for termini, using \code{termini.options} colors. Default to TRUE.
 #' @param termini.options named list of options for the termini (sender/receiver dots)
 #' \itemize{
 #'   \item{sender.fill}{ : Fill sender termini? TRUE or FALSE, default FALSE.}
@@ -34,6 +36,7 @@ geo_lines_map <-
            sender.color = "#fdae61",
            receiver.color = "#d7191c",
            line.options = list(weight = 4),
+           termini.legend = TRUE,
            termini.options = list(
              sender.fill = FALSE,
              receiver.fill = TRUE,
@@ -69,7 +72,7 @@ leaflet_geo_lines_map <- function(...) {
     addStartEnd = TRUE
   )
 
-  leaflet() %>%
+  leaflet_geolines <- leaflet() %>%
     addTiles() %>%
     addPolylines(
       data = geo_lines,
@@ -100,43 +103,50 @@ leaflet_geo_lines_map <- function(...) {
       color = viz.args$receiver.color,
       opacity = 0.6
     )
+
+  if(viz.args$termini.legend){
+
+    addLegendCustom <-
+      function(map, colors, labels, sizes, opacity = 0.5) {
+        ## Inspired by http://stackoverflow.com/a/37482936/1659890
+        colorAdditions <-
+          paste0(colors, "; width:", sizes, "px; height:", sizes, "px")
+        labelAdditions <-
+          paste0(
+            "<div style='display: inline-block;height: ",
+            sizes,
+            "px;margin-top: 4px;line-height: ",
+            sizes,
+            "px;'>",
+            labels,
+            "</div>"
+          )
+
+        return(addLegend(
+          map,
+          colors = colorAdditions,
+          labels = labelAdditions,
+          opacity = opacity
+        ))
+      }
+
+    leaflet_geolines %>%
+      addLegendCustom(
+        colors = c(viz.args$sender.color, viz.args$receiver.color),
+        labels = c("Sender", "Receiver"),
+        sizes = c(10, 10)
+      )
+
+   ## TODO: Add this css to make legend icons circles
+   #  ".leaflet .legend i{
+   #  border-radius: 50%;
+   #                               width: 10px;
+   #                               height: 10px;
+   #                               margin-top: 4px;
+   # }"
+
+  } else {
+    leaflet_geolines
+  }
+
 }
-
-
-## TODO: Generalise addLegendCustom
-#' addLegendCustom
-# addLegendCustom <-
-#   function(map, colors, labels, sizes, opacity = 0.5) {
-#     ## Inspired by http://stackoverflow.com/a/37482936/1659890
-#     colorAdditions <-
-#       paste0(colors, "; width:", sizes, "px; height:", sizes, "px")
-#     labelAdditions <-
-#       paste0(
-#         "<div style='display: inline-block;height: ",
-#         sizes,
-#         "px;margin-top: 4px;line-height: ",
-#         sizes,
-#         "px;'>",
-#         labels,
-#         "</div>"
-#       )
-#
-#     return(addLegend(
-#       map,
-#       colors = colorAdditions,
-#       labels = labelAdditions,
-#       opacity = opacity
-#     ))
-#   }
-#
-# #' leaflet_termini_legend
-# leaflet_termini_legend <- function(map = NA,
-#                                    colors = NA,
-#                                    viz.args = NA) {
-#   map %>%
-#     addLegendCustom(
-#       colors = c("#fdae61", "#d7191c"),
-#       labels = c("Sender", "Receiver"),
-#       sizes = c(10, 10)
-#     )
-# }
