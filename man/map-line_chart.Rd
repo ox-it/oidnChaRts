@@ -5,8 +5,8 @@
 \alias{line_chart}
 \title{Line Charts.}
 \usage{
-line_chart(data, library = "highcharter", x.column, y.column, traces.column,
-  markers = TRUE)
+line_chart(data = NA, library = "highcharter", x.column, y.column,
+  traces.column, markers = TRUE)
 
 hc_line_chart(...)
 }

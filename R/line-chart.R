@@ -7,7 +7,10 @@
 #' @importFrom stats as.formula
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
-#' @param categories.column  Column containing the bar groupings (or categories), in a horizontally orientated barchart these will be the y-axis labels. Must be given as formula, i.e. ~country
+#' @param x.column Column containing x-coordinates for data points
+#' @param y.column Column containing y-cordinates for data points
+#' @param traces.column Column containing the traces/trace names
+#' @param markers Show plot markers on lines? TRUE or FALSE.
 #' @export
 line_chart <- function(data = NA,
                        library = "highcharter",
@@ -46,15 +49,6 @@ hc_line_chart <- function(...) {
     rename_("name" = f_text(viz.args$traces.column)) %>%
     mutate(safe.name = make.names(name))
 
-  print(trace_details)
-
-  trace_names <- data %>%
-    select_(f_text(viz.args$traces.column)) %>%
-    unique() %>%
-    .[[1]]
-
-  trace_names <- stats::setNames(make.names(trace_names), trace_names)
-
   traces_data <- data %>%
     select_(
       f_text(viz.args$x.column),
@@ -67,11 +61,6 @@ hc_line_chart <- function(...) {
             f_text(viz.args$y.column))
 
   colnames(traces_data) <- make.names(colnames(traces_data))
-
-  print("after spread")
-  print(traces_data)
-
-  # setdiff(colnames(traces_data), f_text(viz.args$x.column))
 
   hc <- highchart()
   lapply(trace_details[["safe.name"]],
@@ -93,14 +82,6 @@ hc_line_chart <- function(...) {
              )
 
          })
-
   hc
-
-  # highchart() %>%
-  #   df_to_hc_xy_series(
-  #     data = traces_data,
-  #     x.column = f_text(viz.args$x.column),
-  #     trace = "X.MQ.1..Local"
-  #   )
 
 }
