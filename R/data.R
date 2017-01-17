@@ -26,6 +26,21 @@
 #' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
 "data_line_chart"
 
+#' Scatter chart data
+#'
+#' A (long-formatted) dataset designed to demonstrate different options for scatter charts.
+#'
+#' @format A data frame with 100 rows and 4 variables:
+#' \describe{
+#'   \item{x}{x-values in sample charts}
+#'   \item{y}{y-values in sample charts}
+#'   \item{group}{Groups of points, analagous to different traces in the chart}
+#'   \item{color}{color for the trace/point}
+#' }
+#' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
+"data_scatter_plot"
+
+
 #' Geolines data
 #'
 #' A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).

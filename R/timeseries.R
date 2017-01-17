@@ -32,8 +32,7 @@ calendar_heatmap <- function(data,
 
 
 #' \code{hc_stacked_bar_chart} should not be used directly, it generates a stacked barchart using Plotly.
-#' @rdname map-stacked-bar-chart
-#' @param ... all arguments other than \code{data} and \code{library} provided to \code{stacked_bar_chart}.
+#' @rdname map-calendar-heatmap
 googleViz_calendar_map <- function(...) {
   ## see https://developers.google.com/chart/interactive/docs/gallery/calendar
   #   gvisCalendar(
