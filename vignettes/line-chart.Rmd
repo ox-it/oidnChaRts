@@ -1,0 +1,47 @@
+---
+title: "Charts"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# Load the library
+
+```{r}
+library(oidnChaRts)
+```
+
+This is our dataset:
+
+```{r}
+data_line_chart
+```
+
+Initial call
+
+```{r}
+library(highcharter)
+line_chart(data = data_line_chart,
+           library = "highcharter",
+           x.column = ~af,
+           y.column = ~fdr,
+           traces.column = ~series) %>%
+  hc_yAxis(
+        type = "logarithmic",
+        title = list(text = "FDR"),
+        labels = list(
+          formatter = JS(
+            "function () {
+            var label = this.axis.defaultLabelFormatter.call(this);
+            return this.value.toExponential(2);
+            }"
+))) %>%
+  hc_plotOptions(series = list(marker = list(symbol = "circle")))
+```
+

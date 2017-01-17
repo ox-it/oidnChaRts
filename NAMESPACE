@@ -2,9 +2,11 @@
 
 export(calendar_heatmap)
 export(geo_lines_map)
+export(line_chart)
 export(stacked_bar_chart)
 import(dplyr)
 import(highcharter)
+import(htmltools)
 import(htmlwidgets)
 import(lazyeval)
 import(leaflet)

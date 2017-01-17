@@ -7,8 +7,9 @@
 \usage{
 geo_lines_map(data = NA, library = "leaflet", line.color = "#2c7bb6",
   line.popup = NULL, sender.color = "#fdae61", receiver.color = "#d7191c",
-  line.options = list(weight = 4), termini.options = list(sender.fill =
-  FALSE, receiver.fill = TRUE, sender.radius = 1.2, receiver.radius = 1.2))
+  line.options = list(weight = 4), termini.legend = TRUE,
+  termini.options = list(sender.fill = FALSE, receiver.fill = TRUE,
+  sender.radius = 1.2, receiver.radius = 1.2))
 
 leaflet_geo_lines_map(...)
 }
@@ -32,6 +33,8 @@ leaflet_geo_lines_map(...)
 \item{receiver.color}{color of the dots representing receiver locations, defaults to #d7191c}
 
 \item{line.options}{named list of options for geolines}
+
+\item{termini.legend}{include a legend for termini, using \code{termini.options} colors. Default to TRUE.}
 
 \item{termini.options}{named list of options for the termini (sender/receiver dots)
 \itemize{

@@ -15,6 +15,7 @@ Imports:
     dplyr (>= 0.3.0.1),
     tidyr,
     geosphere,
+    htmltools,
     htmlwidgets,
     googleVis,
     leaflet,
