@@ -85,6 +85,9 @@ hc_scatter_plot <- function(...) {
              )
 
          })
+
+  print(viz.args$marker.tooltip$header.column)
+
   hc %>%
     hc_chart(type = "scatter") %>%
     hc_plotOptions(
@@ -96,4 +99,8 @@ hc_scatter_plot <- function(...) {
                        pointFormat = "({point.x}, {point.y})")
       )
     )
+
+
+
+
 }

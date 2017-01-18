@@ -52,12 +52,16 @@ df_to_hc_xyz_series <- function(hc,
   xyz_series <- xyz_series %>%
     df_to_3d_lists()
 
-  hc %>%
-    hc_add_series(data = xyz_series,
-                  type = "bubble",
-                  name = name,
-                  color = color,
-                  marker = list(fillOpacity = opacity)
-                  )
+
+    hc %>%
+      hc_add_series(data = xyz_series,
+                    type = "bubble",
+                    name = name,
+                    color = color,
+                    marker = list(fillOpacity = opacity)
+      )
+
+
+
 }
 

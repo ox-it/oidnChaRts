@@ -74,11 +74,11 @@ hc_line_chart <- function(...) {
                x.column = f_text(viz.args$x.column),
                trace = safe.series.name,
                color = trace_details %>%
-                 filter_("safe.name" == safe.series.name) %>%
+                 filter(safe.name == safe.series.name) %>%
                  select(color) %>%
                  .[[1]],
                name = trace_details %>%
-                 filter_("safe.name" == safe.series.name) %>%
+                 filter(safe.name == safe.series.name) %>%
                  select(name) %>%
                  .[[1]]
              )

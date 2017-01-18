@@ -168,6 +168,8 @@ stacked_bar_chart(data = data_stacked_bar_chart,
 
 ```{r}
 library(highcharter)
+
+
 scatter_plot(data = data_scatter_plot,
            library = "highcharter",
            x.column = ~x,
