@@ -19,7 +19,6 @@ scatter_plot <- function(data = NA,
                          x.column,
                          y.column,
                          marker.size = 1,
-                         fillOpacity = 0.3,
                          traces.column) {
   ## check library is supported
   if (!library %in% c("highcharter")) {
@@ -50,11 +49,11 @@ hc_scatter_plot <- function(...) {
     mutate(safe.name = make.names(name))
 
   traces_data <- data %>%
-    select_(
-      f_text(viz.args$x.column),
-      f_text(viz.args$y.column),
-      f_text(viz.args$traces.column)
-    ) %>%
+    # select_(
+    #   f_text(viz.args$x.column),
+    #   f_text(viz.args$y.column),
+    #   f_text(viz.args$traces.column)
+    # ) %>%
     mutate(., row = 1:nrow(.)) # ensure enough rows to identify uniqueness http://stackoverflow.com/questions/25960394/unexpected-behavior-with-tidyr#comment40693047_25960394
 
 
@@ -69,8 +68,9 @@ hc_scatter_plot <- function(...) {
   lapply(trace_details[["safe.name"]],
          function(safe.series.name) {
            hc <<- hc %>%
-             df_to_hc_xyz_series(
+             df_to_hc_xy_series(
                data = traces_data,
+               type = "bubble",
                x.column = f_text(viz.args$x.column),
                trace = safe.series.name,
                color = trace_details %>%
@@ -80,13 +80,10 @@ hc_scatter_plot <- function(...) {
                name = trace_details %>%
                  filter(safe.name == safe.series.name) %>%
                  select(name) %>%
-                 .[[1]],
-               opacity = viz.args$fillOpacity
+                 .[[1]]
              )
 
          })
-
-  print(viz.args$marker.tooltip$header.column)
 
   hc %>%
     hc_chart(type = "scatter") %>%

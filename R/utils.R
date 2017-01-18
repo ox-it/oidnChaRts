@@ -1,67 +1,37 @@
-df_to_2d_lists <- function(df){
-  output_list <- list()
-
-  for(row in 1:nrow(df)){
-    output_list[[row]] <- unlist(df[row,], use.names = F)
+df_to_1d_lists <- function(df) {
+  
+  if(!all(c("x","y") %in% colnames(df))){
+    stop("Conversion to lists requires x, y columns")
   }
-  output_list
-}
-
-df_to_3d_lists <- function(df) {
+  
   output_list <- list()
-
+  
   for (row in 1:nrow(df)) {
     output_list[[row]] <-
-      c(unlist(df[row, ], use.names = F), 1) # non-zero size needed for bubbles)
-  }
+      append(df[row,],
+             list(z = 1)) # non-zero size
+  } 
   output_list
 }
 
 df_to_hc_xy_series <- function(hc,
                                data,
+                               type,
                                x.column,
                                trace,
                                name,
                                color){
   xy_series <- data %>%
-    select_(x.column, trace) %>%
-    na.omit() %>%
-    as.data.frame()
-
+    filter_(paste0("!is.na(",trace,")")) %>%
+    rename_("x" = x.column,
+            "y" = trace)
+  
   xy_series <- xy_series %>%
-    df_to_2d_lists()
-
+    df_to_1d_lists()
+  
   hc %>%
     hc_add_series(data = xy_series,
                   name = name,
-                  color = color)
+                  color = color,
+                  type = type)
 }
-
-df_to_hc_xyz_series <- function(hc,
-                               data,
-                               x.column,
-                               trace,
-                               name,
-                               color,
-                               opacity){
-  xyz_series <- data %>%
-    select_(x.column, trace) %>%
-    na.omit() %>%
-    as.data.frame()
-
-  xyz_series <- xyz_series %>%
-    df_to_3d_lists()
-
-
-    hc %>%
-      hc_add_series(data = xyz_series,
-                    type = "bubble",
-                    name = name,
-                    color = color,
-                    marker = list(fillOpacity = opacity)
-      )
-
-
-
-}
-

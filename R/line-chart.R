@@ -51,14 +51,14 @@ hc_line_chart <- function(...) {
     rename_("name" = f_text(viz.args$traces.column)) %>%
     mutate(safe.name = make.names(name))
 
-  traces_data <- data %>%
-    select_(
-      f_text(viz.args$x.column),
-      f_text(viz.args$y.column),
-      f_text(viz.args$traces.column)
-    )
+  # traces_data <- data %>%
+  #   select_(
+  #     f_text(viz.args$x.column),
+  #     f_text(viz.args$y.column),
+  #     f_text(viz.args$traces.column)
+  #   )
 
-  traces_data <- traces_data %>%
+  traces_data <- data %>%
     spread_(f_text(viz.args$traces.column),
             f_text(viz.args$y.column))
 
@@ -71,6 +71,7 @@ hc_line_chart <- function(...) {
            hc <<- hc %>%
              df_to_hc_xy_series(
                data = traces_data,
+               type = "line",
                x.column = f_text(viz.args$x.column),
                trace = safe.series.name,
                color = trace_details %>%

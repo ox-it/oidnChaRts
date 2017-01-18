@@ -166,8 +166,38 @@ stacked_bar_chart(data = data_stacked_bar_chart,
 
 # Scatter plot
 
+Basic scatter plots can be created like this:
+
 ```{r}
 library(highcharter)
+scatter_plot(data = data_scatter_plot,
+           library = "highcharter",
+           x.column = ~x,
+           marker.size = 10,
+           y.column = ~y,
+           traces.column = ~group)
+```
+
+We can provide opacity as follows:
+
+```{r}
+scatter_plot(data = data_scatter_plot,
+           library = "highcharter",
+           x.column = ~x,
+           marker.size = 10,
+           y.column = ~y,
+           traces.column = ~group)
+```
+
+
+## Tooltips
+
+Note that all columns are smuggled into the highcharter object, allowing us to customise the tooltip:
+
+```{r}
+library(dplyr)
+data_scatter_plot <- data_scatter_plot %>%
+  mutate(myData = paste("The group is:", group, " and the colour is: ", color))
 
 
 scatter_plot(data = data_scatter_plot,
@@ -175,8 +205,23 @@ scatter_plot(data = data_scatter_plot,
            x.column = ~x,
            marker.size = 10,
            y.column = ~y,
-           fillOpacity = 0.6,
-           traces.column = ~group)
+           traces.column = ~group) %>%
+  hc_tooltip(
+        formatter = JS(
+          "function(){
+          console.log(this);
+          return '<b>' + this.series.name + '</b>' + 
+                  '<br/>' +
+                  '<b>Custom content: </b>' + this.point.myData +
+                  '<br/>' +
+                  '<b>x: </b>' + this.x +
+                  '<br/>' +
+                  '<b>y: </b>' + this.y;}"
+          )
+        ) 
 ```
+
+
+
 
 
