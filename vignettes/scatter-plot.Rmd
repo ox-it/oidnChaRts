@@ -1,0 +1,91 @@
+---
+title: "Charts"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# Scatter plot
+
+Basic scatter plots can be created like this:
+
+```{r}
+library(oidnChaRts)
+library(tidyverse)
+data_scatter_plot %>%
+  scatter_plot(library = "highcharter",
+           x.column = ~na12882_2_s1.naive.baf,
+           marker.size = 10,
+           y.column = ~na12882_s1.naive.baf,
+           traces.column = ~type)
+```
+
+With plotly
+
+```{r}
+data_scatter_plot %>%
+  scatter_plot(library = "plotly",
+           x.column = ~na12882_2_s1.naive.baf,
+           marker.size = 10,
+           y.column = ~na12882_s1.naive.baf,
+           traces.column = ~type)
+```
+
+With rbokeh
+
+```{r}
+data_scatter_plot %>%
+  scatter_plot(library = "rbokeh",
+           x.column = ~na12882_2_s1.naive.baf,
+           marker.size = 10,
+           y.column = ~na12882_s1.naive.baf,
+           traces.column = ~type)
+```
+
+
+## Tooltips
+
+The `highcharter` library embeds the entirety of the `data.frame` into the chart, and allows us to construct a tooltip as follows:
+
+```{r}
+library(dplyr)
+data_scatter_plot %>%
+scatter_plot(library = "highcharter",
+           x.column = ~na12882_2_s1.naive.baf,
+           marker.size = 10,
+           y.column = ~na12882_s1.naive.baf,
+           traces.column = ~type) %>%
+  hc_tooltip(
+        formatter = JS(
+          "function(){
+          console.log(this);
+          return '<b>' + this.series.name + '</b>' + 
+                  '<br/>' +
+                  '<b>Position: </b>' + this.point.position +
+                  '<br/>' +
+                  '<b>x: </b>' + this.x +
+                  '<br/>' +
+                  '<b>y: </b>' + this.y;}"
+          )
+        ) 
+```
+
+Unfortunately, the `plotly` library requires tooltips to be specified in the original `plot_ly` call and in the interest of general usability this has not been included in the `oidnChaRts` library. Tooltips could be added to a plotly chart natively as follows:
+
+```{r}
+data_scatter_plot %>%
+  plot_ly(
+    x = ~na12882_2_s1.naive.baf,
+    y = ~na12882_s1.naive.baf,
+    color = ~type,
+    colors = ~color,
+    text = ~paste(position, chr)
+  )
+```
+

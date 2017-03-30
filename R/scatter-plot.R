@@ -21,17 +21,19 @@ scatter_plot <- function(data = NA,
                          marker.size = 1,
                          traces.column) {
   ## check library is supported
-  if (!library %in% c("highcharter")) {
+  if (!library %in% c("highcharter", "plotly", "rbokeh")) {
     stop(paste(
-      "The selected library is not supported, choose from; highcharter"
+      "The selected library is not supported, choose from; highcharter, plotly, rbokeh."
     ))
   }
-
+  
   viz.args <-
     mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
-
+  
   switch (library,
-          "highcharter" = hc_scatter_plot(viz.args))
+          "highcharter" = hc_scatter_plot(viz.args),
+          "plotly" = plotly_scatter_plot(viz.args),
+          "rbokeh" = rbokeh_scatter_plot(viz.args))
 }
 
 #' \code{hc_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
@@ -40,14 +42,14 @@ scatter_plot <- function(data = NA,
 hc_scatter_plot <- function(...) {
   viz.args <- list(...)[[1]]
   data <- viz.args$data
-
+  
   trace_details <- data %>%
     select_(f_text(viz.args$traces.column),
             "color") %>%
     unique() %>%
     rename_("name" = f_text(viz.args$traces.column)) %>%
     mutate(safe.name = make.names(name))
-
+  
   traces_data <- data %>%
     # select_(
     #   f_text(viz.args$x.column),
@@ -55,16 +57,16 @@ hc_scatter_plot <- function(...) {
     #   f_text(viz.args$traces.column)
     # ) %>%
     mutate(., row = 1:nrow(.)) # ensure enough rows to identify uniqueness http://stackoverflow.com/questions/25960394/unexpected-behavior-with-tidyr#comment40693047_25960394
-
-
+  
+  
   traces_data <- traces_data %>%
     spread_(f_text(viz.args$traces.column),
             f_text(viz.args$y.column))
-
+  
   colnames(traces_data) <- make.names(colnames(traces_data))
-
+  
   hc <- highchart()
-
+  
   lapply(trace_details[["safe.name"]],
          function(safe.series.name) {
            hc <<- hc %>%
@@ -82,22 +84,54 @@ hc_scatter_plot <- function(...) {
                  select(name) %>%
                  .[[1]]
              )
-
+           
          })
-
+  
   hc %>%
     hc_chart(type = "scatter") %>%
     hc_plotOptions(
       bubble = list(
-        minSize = viz.args$marker.size, # Only way to limit bubble size.
-        maxSize = viz.args$marker.size, # Only way to limit bubble size.
+        minSize = viz.args$marker.size,
+        # Only way to limit bubble size.
+        maxSize = viz.args$marker.size,
+        # Only way to limit bubble size.
         ## Remove the size from the tooltip
         tooltip = list(headerFormat = "<b>{series.name}</b><br>",
                        pointFormat = "({point.x}, {point.y})")
       )
     )
-
-
-
-
+  
 }
+
+#' \code{plotly_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
+#' @rdname map-scatter-plot
+#' @param ... all arguments provided to \code{scatter_plot}.
+plotly_scatter_plot <- function(...) {
+  viz.args <- list(...)[[1]]
+  plot_data <- viz.args$data
+  
+  
+  plot_data %>%
+    plot_ly(
+      x = viz.args$x.column,
+      y = viz.args$y.column,
+      color = viz.args$traces.column,
+      colors = ~color
+    ) %>%
+    add_markers(alpha = 0.5)
+  
+}
+
+rbokeh_scatter_plot <- function(...) {
+  viz.args <- list(...)[[1]]
+  plot_data <- viz.args$data
+  
+  plot_data %>%
+    figure() %>%
+    ly_points(x = viz.args$x.column,
+              y = viz.args$y.column)
+  
+}
+
+
+

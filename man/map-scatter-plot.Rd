@@ -2,13 +2,16 @@
 % Please edit documentation in R/scatter-plot.R
 \name{scatter_plot}
 \alias{hc_scatter_plot}
+\alias{plotly_scatter_plot}
 \alias{scatter_plot}
 \title{Scatter plot.}
 \usage{
 scatter_plot(data = NA, library = "highcharter", x.column, y.column,
-  marker.size = 1, fillOpacity = 0.3, traces.column)
+  marker.size = 1, traces.column)
 
 hc_scatter_plot(...)
+
+plotly_scatter_plot(...)
 }
 \arguments{
 \item{data}{A dataframe, must be long-formatted.}
@@ -21,13 +24,19 @@ hc_scatter_plot(...)
 
 \item{marker.size}{Size of markers (circles, by default)}
 
+\item{traces.column}{Column containing the traces/trace names}
+
+\item{...}{all arguments provided to \code{scatter_plot}.}
+
 \item{fillOpacity}{Opacity of markers}
 
-\item{traces.column}{Column containing the traces/trace names}
+\item{...}{all arguments provided to \code{scatter_plot}.}
 }
 \description{
 \code{scatter_plot} creates a scatter plot using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 
 \code{hc_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
+
+\code{plotly_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
 }
 

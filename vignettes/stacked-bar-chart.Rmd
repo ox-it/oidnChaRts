@@ -1,5 +1,5 @@
 ---
-title: "Charts"
+title: "Stacked bar chart"
 author: "Martin John Hadley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -17,10 +17,23 @@ vignette: >
 library(oidnChaRts)
 ```
 
+This vignette covers the following charts:
 
-## Grouped Bar Charts
+- Grouped bar charts
+- Stacked bar charts
+- Scatterplots
+- Line charts
+- Treemaps
 
-If highcharter is selected, the data will automatically be reshaped into wide format:
+# Grouped Bar Charts
+
+The data for grouped bar charts is the same as that for all bar charts:
+
+```{r}
+data_stacked_bar_chart
+```
+
+The following will create a generic grouped bar chart with highcharter:
 
 ```{r}
 stacked_bar_chart(data = data_stacked_bar_chart,
@@ -30,7 +43,7 @@ stacked_bar_chart(data = data_stacked_bar_chart,
                   value.column = ~hours)
 ```
 
-If plotly is selected the data will be provided directly to plotly for visualisation:
+The following will create a generic grouped bar chart with plotly:
 
 ```{r}
 stacked_bar_chart(data = data_stacked_bar_chart,
@@ -40,13 +53,13 @@ stacked_bar_chart(data = data_stacked_bar_chart,
                   value.column = ~hours)
 ```
 
-### Ordering Categories
+## Ordering Categories
 
-Highcharter
+Category order can be supplied directly to the `country_order` column.
 
 ```{r}
 country_order <- c("United Kingdom", "Canada", "China", "Estonia", "Egypt", "France", "Germany", 
-"Ireland", "Saudi Arabia", "Slovakia")
+"Ireland", "Saudi Arabia")
 stacked_bar_chart(data = data_stacked_bar_chart,
                   library = "highcharter",
                   categories.column = ~country,
@@ -68,7 +81,7 @@ stacked_bar_chart(data = data_stacked_bar_chart,
                   value.column = ~hours)
 ```
 
-### Explicitly Ordering Subcategories
+## Explicitly Ordering Subcategories
 
 Highcharter explicitly ordered subcategories:
 
@@ -98,9 +111,37 @@ stacked_bar_chart(data = data_stacked_bar_chart,
                   subcategories.order = activity_order)
 ```
 
-## Stacked Normal
+# Stacked Bar Charts
 
-Highcharter explicitly ordered subcategories with stacked bars.
+The data for grouped bar charts is the same as that for all bar charts:
+
+```{r}
+data_stacked_bar_chart
+```
+
+If highcharter is selected, the data will automatically be reshaped into wide format:
+
+```{r}
+stacked_bar_chart(data = data_stacked_bar_chart,
+                  library = "highcharter",
+                  categories.column = ~country,
+                  subcategories.column = ~activity,
+                  value.column = ~hours,
+                  stacking.type = "normal")
+```
+
+If plotly is selected the data will be provided directly to plotly for visualisation:
+
+```{r}
+stacked_bar_chart(data = data_stacked_bar_chart,
+                  library = "plotly",
+                  categories.column = ~country,
+                  subcategories.column = ~activity,
+                  value.column = ~hours,
+                  stacking.type = "normal")
+```
+
+
 
 ```{r}
 activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
@@ -163,65 +204,3 @@ stacked_bar_chart(data = data_stacked_bar_chart,
                   subcategories.order = activity_order,
                   stacking.type = "percent")
 ```
-
-# Scatter plot
-
-Basic scatter plots can be created like this:
-
-```{r}
-library(highcharter)
-scatter_plot(data = data_scatter_plot,
-           library = "highcharter",
-           x.column = ~x,
-           marker.size = 10,
-           y.column = ~y,
-           traces.column = ~group)
-```
-
-We can provide opacity as follows:
-
-```{r}
-scatter_plot(data = data_scatter_plot,
-           library = "highcharter",
-           x.column = ~x,
-           marker.size = 10,
-           y.column = ~y,
-           traces.column = ~group)
-```
-
-
-## Tooltips
-
-Note that all columns are smuggled into the highcharter object, allowing us to customise the tooltip:
-
-```{r}
-library(dplyr)
-data_scatter_plot <- data_scatter_plot %>%
-  mutate(myData = paste("The group is:", group, " and the colour is: ", color))
-
-
-scatter_plot(data = data_scatter_plot,
-           library = "highcharter",
-           x.column = ~x,
-           marker.size = 10,
-           y.column = ~y,
-           traces.column = ~group) %>%
-  hc_tooltip(
-        formatter = JS(
-          "function(){
-          console.log(this);
-          return '<b>' + this.series.name + '</b>' + 
-                  '<br/>' +
-                  '<b>Custom content: </b>' + this.point.myData +
-                  '<br/>' +
-                  '<b>x: </b>' + this.x +
-                  '<br/>' +
-                  '<b>y: </b>' + this.y;}"
-          )
-        ) 
-```
-
-
-
-
-

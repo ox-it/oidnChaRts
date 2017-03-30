@@ -1,3 +1,5 @@
+library(tidyverse)
+
 data_stacked_bar_chart <- data.frame(
   "country" = c(
     "United Kingdom",
@@ -27,7 +29,8 @@ data_stacked_bar_chart <- data_stacked_bar_chart %>%
   gather(activity, hours, match(
     setdiff(colnames(data_stacked_bar_chart), categories_column),
     colnames(data_stacked_bar_chart)
-  ))
+  )) %>%
+  as_data_frame()
 
 save(data_stacked_bar_chart,
      file = "data/data_stacked_bar_chart.rdata")
@@ -51,17 +54,40 @@ data_line_chart <- data_line_chart %>%
 save(data_line_chart,
      file = "data/data_line_chart.rdata")
 
-## ======================== data_line_chart
+## ======================== data_scatter_chart
 
-data_scatter_plot <- data.frame(
-  x = rnorm(100),
-  y = rnorm(100),
-  group = rep(c("A","B","C","D"), 25),
-  color = rep(c(rgb(0, 1, 0, 0.1), rgb(1, 1, 0, 0.1), rgb(0, 1, 1, 0.1), rgb(0, 0, 1, 0.1)), 25)
-) %>%
-  as_data_frame()
+library(rfigshare)
+library(tidyverse)
+
+deposit_details <- fs_details("4555441")
+
+deposit_files <- unlist(deposit_details$files)
+deposit_files <-
+  data.frame(split(deposit_files, names(deposit_files)), stringsAsFactors = FALSE)
+data_url <- deposit_files %>%
+  filter(grepl("thesaurus.fig4-MQ0.tsv", name)) %>%
+  select(download_url) %>%
+  .[[1]]
+
+data_scatter_plot <- read_tsv(data_url)
+colnames(data_scatter_plot) <- tolower(colnames(data_scatter_plot))
+
+
+data_scatter_plot <- data_scatter_plot %>%
+  mutate(color = ifelse(
+    type == "Concordant",
+    rgb(27 / 255, 158 / 255, 119 / 255, 0.3),
+    rgb(177 / 255, 158 / 255, 119 / 255, 0.3)
+  ))
+
+
+# data_scatter_plot <- data.frame(
+#   x = rnorm(100),
+#   y = rnorm(100),
+#   group = rep(c("A","B","C","D"), 25),
+#   color = rep(c(rgb(0, 1, 0, 0.1), rgb(1, 1, 0, 0.1), rgb(0, 1, 1, 0.1), rgb(0, 0, 1, 0.1)), 25)
+# ) %>%
+#   as_data_frame()
 
 save(data_scatter_plot,
      file = "data/data_scatter_plot.rdata")
-
-

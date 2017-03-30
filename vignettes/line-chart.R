@@ -1,33 +1,12 @@
----
-title: "Charts"
-author: "Martin John Hadley"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
-
-# Load the library
-
-```{r}
+## ------------------------------------------------------------------------
 library(oidnChaRts)
-```
 
-This is our dataset:
-
-```{r}
+## ------------------------------------------------------------------------
 
 
 
-```
 
-Initial call
-
-```{r}
+## ------------------------------------------------------------------------
 library(highcharter)
 line_chart(data = data_line_chart,
            library = "highcharter",
@@ -45,5 +24,4 @@ line_chart(data = data_line_chart,
             }"
 ))) %>%
   hc_plotOptions(series = list(marker = list(symbol = "circle")))
-```
 

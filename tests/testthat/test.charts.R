@@ -24,7 +24,7 @@ test_that(
       return.data = TRUE
     )
 
-    expect_true(all(class(hc) %in% c("data.frame")))
+    expect_true(all(class(hc) %in% c("tbl_df","tbl","data.frame")))
 
   }
 )

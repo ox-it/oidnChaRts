@@ -22,6 +22,8 @@ hc_line_chart(...)
 \item{traces.column}{Column containing the traces/trace names}
 
 \item{markers}{Show plot markers on lines? TRUE or FALSE.}
+
+\item{...}{all arguments provided to \code{line_chart}.}
 }
 \description{
 \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.

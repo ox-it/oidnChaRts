@@ -20,7 +20,8 @@ Imports:
     googleVis,
     leaflet,
     highcharter,
-    plotly
+    plotly,
+    rbokeh
 URL: http://martinjhnhadley.github.io/OxfordIDN_htmlwidgets
 RoxygenNote: 5.0.1
 Suggests: knitr,

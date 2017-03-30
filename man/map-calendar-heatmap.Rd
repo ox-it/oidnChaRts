@@ -2,10 +2,13 @@
 % Please edit documentation in R/timeseries.R
 \name{calendar_heatmap}
 \alias{calendar_heatmap}
+\alias{googleViz_calendar_map}
 \alias{rcharts_calendar_map}
 \title{Calendar Heatmap.}
 \usage{
 calendar_heatmap(data, library = "googleVis")
+
+googleViz_calendar_map(...)
 
 rcharts_calendar_map(...)
 }
@@ -21,6 +24,8 @@ Stacked bar chart of the class specified by the specified library.
 }
 \description{
 \code{calendar_heatmap} creates a calendar heatmap using the specified library, which can be used in the library's \code{\%>\%} workflow. Data must be provided in long format.
+
+\code{hc_stacked_bar_chart} should not be used directly, it generates a stacked barchart using Plotly.
 
 \code{rcharts_calendar_map} should not be used directly, it generates a calendar heatmap using rCharts.
 }
