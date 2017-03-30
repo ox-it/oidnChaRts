@@ -6,7 +6,7 @@ cache: packages
 
 r_github_packages:
   - jimhester/covr
-  - martinjhnhadley/oidnChaRts
+  - ox-it/oidnChaRts
 
 after_success:
   - Rscript -e 'library(covr);codecov()'

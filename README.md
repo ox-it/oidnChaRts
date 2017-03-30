@@ -3,7 +3,7 @@
 oidnChaRts
 ==========
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/oidnChaRts)](https://cran.r-project.org/package=oidnChaRts) [![Travis-CI Build Status](https://travis-ci.org/martinjhnhadley/oidnChaRts.svg?branch=master)](https://travis-ci.org/martinjhnhadley/oidnChaRts) [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/martinjhnhadley/oidnChaRts.svg)](https://codecov.io/gh/martinjhnhadley/oidnChaRts)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/oidnChaRts)](https://cran.r-project.org/package=oidnChaRts) [![Travis-CI Build Status](https://travis-ci.org/ox-it/oidnChaRts.svg?branch=master)](https://travis-ci.org/ox-it/oidnChaRts) [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/ox-it/oidnChaRts.svg)](https://codecov.io/gh/ox-it/oidnChaRts)
 
 A collection of functions for building generic interactive `htmlwidget` visualisations, primarily to compare library "A" vs "B" but also usable in their own right.
 
@@ -23,7 +23,7 @@ Installing
 This library is unlikely to be submitted to CRAN, it must be installed as follows:
 
 ``` r
-devtools::install_github("martinjhnhadley/oidnChaRts")
+devtools::install_github("ox-it/oidnChaRts")
 ```
 
 License
