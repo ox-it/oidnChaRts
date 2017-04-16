@@ -21,4 +21,3 @@ data_scatter_plot
 A (long-formatted) dataset designed to demonstrate different options for scatter charts.
 }
 \keyword{datasets}
-
