@@ -7,6 +7,8 @@ oidnChaRts
 
 A collection of functions for building generic interactive `htmlwidget` visualisations, primarily to compare library "A" vs "B" but also usable in their own right.
 
+<img src="data-raw/oidnChaRt-sticker.png" width="100px">
+
 Functions are in general called as follows:
 
 ``` r
