@@ -108,7 +108,7 @@ hc_stacked_bar_chart <- function(...) {
       any()) {
     stop(
       print(
-        "There must NOT be duplicate entries for category/subcategory pairs, try converting the data to wide format yourself"
+        "There must NOT be duplicate entries for category/subcategory pairs, check that the data is indeed long formatted"
       )
     )
   }
@@ -177,22 +177,16 @@ plotly_stacked_bar_chart <- function(...) {
   viz.args <- list(...)[[1]]
   data <- viz.args$data
   
-  # sample_data %>% gather_("Activity", "Days", setdiff(colnames(sample_data), "Countries"))
   plot_data <- data
   
   if (!any(is.na(viz.args$subcategories.order))) {
-    ## grouped bars do not reverse the legend, but does reverse bar order
-    if (is.na(viz.args$stacking.type)) {
       plot_data[, f_text(viz.args$subcategories.column)] <-
         factor(plot_data %>%
-                 select_(f_text(viz.args$subcategories.order)) %>%
+                 select_(f_text(viz.args$subcategories.column)) %>%
                  .[[1]],
                levels = rev(viz.args$subcategories.order))
-    }
-  } else {
-    ## allow automated ordering
-    plot_data
   }
+
   
   if (!any(is.na(viz.args$categories.order))) {
     plot_data[, f_text(viz.args$categories.column)] <-
