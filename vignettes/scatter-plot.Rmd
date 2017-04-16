@@ -40,12 +40,12 @@ data_scatter_plot %>%
 With rbokeh
 
 ```{r}
-data_scatter_plot %>%
-  scatter_plot(library = "rbokeh",
-           x.column = ~na12882_2_s1.naive.baf,
-           marker.size = 10,
-           y.column = ~na12882_s1.naive.baf,
-           traces.column = ~type)
+# data_scatter_plot %>%
+#   scatter_plot(library = "rbokeh",
+#            x.column = ~na12882_2_s1.naive.baf,
+#            marker.size = 10,
+#            y.column = ~na12882_s1.naive.baf,
+#            traces.column = ~type)
 ```
 
 
@@ -79,13 +79,13 @@ scatter_plot(library = "highcharter",
 Unfortunately, the `plotly` library requires tooltips to be specified in the original `plot_ly` call and in the interest of general usability this has not been included in the `oidnChaRts` library. Tooltips could be added to a plotly chart natively as follows:
 
 ```{r}
-data_scatter_plot %>%
-  plot_ly(
-    x = ~na12882_2_s1.naive.baf,
-    y = ~na12882_s1.naive.baf,
-    color = ~type,
-    colors = ~color,
-    text = ~paste(position, chr)
-  )
+# data_scatter_plot %>%
+#   plot_ly(
+#     x = ~na12882_2_s1.naive.baf,
+#     y = ~na12882_s1.naive.baf,
+#     color = ~type,
+#     colors = ~color,
+#     text = ~paste(position, chr)
+#   )
 ```
 

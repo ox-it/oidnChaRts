@@ -3,6 +3,7 @@
 \docType{data}
 \name{data_geo_lines_map}
 \alias{data_geo_lines_map}
+\alias{data_geo_lines_map}
 \title{Geolines data}
 \format{A data frame with 617 rows and 9 variables:
 \describe{
@@ -35,4 +36,3 @@ A (long-formatted) dataset designed to demonstrate different options for geoline
 The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.
 }
 \keyword{datasets}
-

@@ -51,4 +51,3 @@ leaflet_geo_lines_map(...)
 
 \code{leaflet_geo_lines_map} should not be used directly, it generates a map with great circles between points using Leaflet.
 }
-

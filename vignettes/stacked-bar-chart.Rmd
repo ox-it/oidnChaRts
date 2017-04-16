@@ -11,196 +11,437 @@ vignette: >
 
 <!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
 
-# Load the library
+# Overview of function
+
+`stacked_bar_chart` can be used to create the following kinds of charts:
+
+- Grouped bar charts
+- Stacked bar charts
+- Percentile stacked bar charts
+
+As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
+
+# data_stacked_bar_chart
 
 ```{r}
 library(oidnChaRts)
 ```
 
-This vignette covers the following charts:
+This vignette covers the use of stacked bar charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.3761562. The dataset concerns the number of jobs advertised on a number of "freelance websites" on a specific date, here's how the data looks:
 
-- Grouped bar charts
-- Stacked bar charts
-- Scatterplots
-- Line charts
-- Treemaps
+```{r}
+head(data_stacked_bar_chart)
+```
+
+The original dataset includes measurements since 2016/09/05, this snapshot is re-generated everytime the `oidnChaRts` library is rebuilt, the current value is `r data_stacked_bar_chart$timestamp[1]`. The columns of interest are as follows:
+
+- country: where the employer for a job is located
+- country_group: groupings determined by the researchers, i.e. "other Europe" and "all Africa"
+- occupation: classification of the job posting
+- count: how many jobs met the above specifications
+
+# Stacked barchart specifications
+
+In stacked/grouped bar chart there are "categories" and "subcategories" of observations, here are possible combinations for our dataset:
+
+- Categories: country_group, Subcategories: country, Purpose of chart: Which countries are most significant within each country grouping?
+- Categories: country_group, Subcategories: occupations, Question chart answers: Which occupations are most signficiant within each country_group grouping?
+
+In order to create these charts, we must first process the data using the tidyverse:
+
+```{r}
+data_stacked_bar_chart %>%
+  group_by(country_group, country) %>%
+  summarise(total = sum(count)) %>%
+  ungroup()
+```
+
+This code will be used in all further examples in this document, note that for your analyses it might make more sense to store the output of this code as a new symbol.
+
 
 # Grouped Bar Charts
 
-The data for grouped bar charts is the same as that for all bar charts:
+Grouped barcharts group data into categories and then display a separate bar for each subcategory.
 
-```{r}
-data_stacked_bar_chart
+```{r, echo=F}
+descending_order_of_occupations <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  mutate(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  ungroup() %>%
+  select(occupation) %>%
+  unique() %>%
+  .[[1]]
+
+descending_order_of_regions <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  select(country_group) %>%
+  unique() %>%
+  .[[1]]
+
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total)
+remove(descending_order_of_occupations, descending_order_of_regions)
 ```
+
 
 The following will create a generic grouped bar chart with highcharter:
 
 ```{r}
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  subcategories.column = ~activity,
-                  value.column = ~hours)
+library(highcharter)
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total)
+  
 ```
 
 The following will create a generic grouped bar chart with plotly:
 
 ```{r}
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  subcategories.column = ~activity,
-                  value.column = ~hours)
+library(plotly)
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total)
 ```
+
+At the time of writing `r Sys.Date()`, the plotly library does a poor job at ensuring the category labels (y-axis labels) are not chopped off. The `layout` function from `plotly` allows us to modify the margins and drop the unnecessary label for the y-axis.
+
+```{r}
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total) %>%
+  layout(margin = list(l = 150),
+         yaxis = list(title = ""))
+```
+
 
 ## Ordering Categories
 
-Category order can be supplied directly to the `country_order` column.
+Category order can be supplied directly to the `categories.order` column.
 
 ```{r}
-country_order <- c("United Kingdom", "Canada", "China", "Estonia", "Egypt", "France", "Germany", 
-"Ireland", "Saudi Arabia")
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours)
+## Note: future versions of the dataset may use different groupings, this code assumes "United States" and "United Kingdom" remain distinct entities in "country_group"
+order_of_regions <- c(c("United States", "United Kingdom"), setdiff(unique(data_stacked_bar_chart$country_group), c("United States", "United Kingdom")))
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    categories.column = ~country_group,
+                    categories.order = order_of_regions,
+                    subcategories.column = ~occupation,
+                    value.column = ~total)
 ```
 
-Plotly ordered categories:
+A good pattern to follow with grouped bar charts is to order the categories from "largest to smallest", i.e. the country_group with the most number of jobs at the top of the chart and the least at the bottom. This functionality is deliberately NOT provided by the `stacked_bar_chart` function, instead you *must* modify the data:
 
 ```{r}
-country_order <- c("Canada", "China", "Egypt", "Estonia", "France", "Germany", 
-"Ireland", "Saudi Arabia", "Slovakia", "United Kingdom")
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours)
+descending_order_of_regions <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  select(country_group) %>%
+  unique() %>%
+  .[[1]]
+
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    value.column = ~total) %>%
+  layout(margin = list(l = 150),
+         yaxis = list(title = ""))
 ```
+
 
 ## Explicitly Ordering Subcategories
 
-Highcharter explicitly ordered subcategories:
+Subcategory order can be supplied directly to the `subcategories.order` column.
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
-
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order)
+## Note: future versions of the dataset may use different occupations, this code assumes "Writing and translation" and "Creative and multimedia" remain distinct entities in "occupation"
+order_of_occupations <- c(c("Writing and translation", "Creative and multimedia"), setdiff(unique(data_stacked_bar_chart$occupation), c("Writing and translation", "Creative and multimedia")))
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = order_of_occupations,
+                    value.column = ~total)
 ```
 
-Plotly explicitly ordered subcategories:
+In addition to ordering the categories by descending size, it is useful to do the same for the subcategories:
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
+descending_order_of_occupations <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  mutate(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  ungroup() %>%
+  select(occupation) %>%
+  unique() %>%
+  .[[1]]
 
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order)
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total)
+```
+
+Frustratingly, at the time of writing `r Sys.Date()` the `plotly` library reverses the order of legends compared to bars:
+
+```{r}
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total) %>%
+    layout(margin = list(l = 150),
+         yaxis = list(title = ""))
 ```
 
 # Stacked Bar Charts
 
-The data for grouped bar charts is the same as that for all bar charts:
+Stacked barcharts group data into categories and then create one bar with segments corresponding to the subcategory values. Note that there are two types of stacked:
 
-```{r}
-data_stacked_bar_chart
+- normal: the length of the bar for each category is the total of the length of each subcategory (i.e. within category total)
+- percent: the length of all bars in the chart sum to 100% and the segment length corresponds to the within category percentage of values associated with that subcategory. See the [stacked percentage](#stacked-percentage) section for details.
+
+```{r, echo=F}
+descending_order_of_occupations <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  mutate(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  ungroup() %>%
+  select(occupation) %>%
+  unique() %>%
+  .[[1]]
+
+descending_order_of_regions <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  select(country_group) %>%
+  unique() %>%
+  .[[1]]
+
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total)
+remove(descending_order_of_occupations, descending_order_of_regions)
 ```
 
-If highcharter is selected, the data will automatically be reshaped into wide format:
+The following will create a generic stacked bar chart with highcharter:
 
 ```{r}
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  stacking.type = "normal")
+library(highcharter)
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total)
 ```
 
-If plotly is selected the data will be provided directly to plotly for visualisation:
+It is convenient to enable grouped tooltips for `highcharter`, so that values for all subcategories are shown on hover. The following code will be used in all further examples with `highcharter` for stacked bar charts:
 
 ```{r}
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  stacking.type = "normal")
-```
-
-
-
-```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal Visit", "Teleconference")
-
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order,
-                  stacking.type = "normal")
-```
-
-Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
-
-```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
-
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order,
-                  stacking.type = "normal")
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total) %>%
+  hc_tooltip(shared = TRUE)
 ```
 
 
-
-## Stacked Percentage
-
-Highcharter explicitly ordered subcategories with stacked bars.
+The following will create a generic stacked bar chart with plotly:
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
-
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "highcharter",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order,
-                  stacking.type = "percent")
+library(plotly)
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total)
 ```
 
-Plotly explicitly ordered subcategories with stacked bars, note that legend order cannot be fixed (https://github.com/plotly/plotly.js/issues/394)
+At the time of writing `r Sys.Date()`, the plotly library does a poor job at ensuring the category labels (y-axis labels) are not chopped off. The `layout` function from `plotly` allows us to modify the margins and drop the unnecessary label for the y-axis.
 
 ```{r}
-activity_order <- c("Unclassified", "Business", "Overlay", "Personal", "Teleconference")
-
-stacked_bar_chart(data = data_stacked_bar_chart,
-                  library = "plotly",
-                  categories.column = ~country,
-                  categories.order = country_order,
-                  subcategories.column = ~activity,
-                  value.column = ~hours,
-                  subcategories.order = activity_order,
-                  stacking.type = "percent")
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    subcategories.column = ~occupation,
+                    value.column = ~total) %>%
+  layout(margin = list(l = 150),
+         yaxis = list(title = ""))
 ```
+
+
+## Ordering Categories
+
+A good pattern to follow with stacked bar charts is to order the categories from "largest to smallest", i.e. the country_group with the most number of jobs at the top of the chart and the least at the bottom. This functionality is deliberately NOT provided by the `stacked_bar_chart` function, instead you *must* modify the data:
+
+```{r}
+descending_order_of_regions <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  select(country_group) %>%
+  unique() %>%
+  .[[1]]
+
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    value.column = ~total) %>%
+  layout(margin = list(l = 150),
+         yaxis = list(title = ""))
+```
+
+## Explicitly Ordering Subcategories
+
+In addition to ordering the categories by descending size, it is useful to do the same for the subcategories:
+
+```{r}
+descending_order_of_occupations <- data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  mutate(total = sum(count)) %>%
+  mutate(total.in.group = sum(total)) %>%
+  arrange(desc(total.in.group)) %>%
+  ungroup() %>%
+  select(occupation) %>%
+  unique() %>%
+  .[[1]]
+
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    stacking.type = "normal",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total) %>%
+  hc_tooltip(shared = TRUE)
+```
+
+
+## Stacked Percentage {#stacked-percentage}
+
+The `stacked_bar_chart` function automatically calculates within category percentages for subcategory values, for instance:
+
+```{r}
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "highcharter",
+                    stacking.type = "percent",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total) %>%
+  hc_tooltip(shared = TRUE)
+```
+
+```{r}
+data_stacked_bar_chart %>%
+  group_by(country_group, occupation) %>%
+  summarise(total = sum(count)) %>%
+  ungroup() %>%
+  stacked_bar_chart(library = "plotly",
+                    stacking.type = "percent",
+                    categories.column = ~country_group,
+                    categories.order = descending_order_of_regions,
+                    subcategories.column = ~occupation,
+                    subcategories.order = descending_order_of_occupations,
+                    value.column = ~total) %>%
+  layout(margin = list(l = 150),
+         yaxis = list(title = ""))
+```
+
+

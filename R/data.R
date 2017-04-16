@@ -1,15 +1,18 @@
 #' Stacked bar chart data
 #'
-#' A (long-formatted) dataset designed to demonstrate different options for stacked bar charts.
+#' A (long-formatted) dataset sourced from https://doi.org/10.6084/m9.figshare.3761562 which demonstrates the utility of grouped and stacked bar charts for comparing datasets which contain two-levels of categorisation, i.e. which types of jobs are most often listed on freelance websites in each continent?
 #'
 #' @format A data frame with 10 rows and 6 variables:
 #' \describe{
-#'   \item{country}{country where activity took place}
-#'   \item{activity}{type of activity}
-#'   \item{hours}{hours spent performing activity}
+#'   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
+#'   \item{count}{Number of job adverts on the freelancer websites}
+#'   \item{country}{Country listed for job poster}
+#'   \item{country_group}{groupings determined by the researchers, i.e. "other Europe" and "all Africa"}
+#'   \item{occupation}{classification of the job posting}
 #' }
 #' @source \url{http://www.diamondse.info/}
 "data_stacked_bar_chart"
+
 
 #' Line chart data
 #'
