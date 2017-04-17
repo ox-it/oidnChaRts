@@ -11,63 +11,152 @@ vignette: >
 
 <!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
 
-# Scatter plot
+# Overview of function
 
-Basic scatter plots can be created like this:
+`scatter_plot` can be used to create the following kinds of charts:
+
+- Scatter plots
+
+Note that this function specifically assumes a high point density where marker opacity is required. If you're interested in comparing multiple series of points together with different shapes, you will need to use `scatter_chart` instead.
+
+As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
+
+# data_stacked_bar_chart
 
 ```{r}
 library(oidnChaRts)
-library(tidyverse)
-data_scatter_plot %>%
+```
+
+This vignette covers the use of scatter plots for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.4555441. To explain the details of the research dataset we would require domain specific expertise, but the format of the dataset in this package is fairly easy to understand:
+
+```{r}
+head(data_scatter_plot)
+```
+
+The columns may be summarised as follows:
+
+- chromsome: Chromosome and genomic position of gene
+- type: Concordant (both sites are identical) or Discordant (mutations only in one replicate)
+- x: Allelic frequencies of gene in replicate 1
+- y: Allelic frequencies of gene in replicate 2
+
+Crucial to this dataset is the comparison of the two traces, "Concordant" and "Discordant". This requires the scatter plot to use an alpha channel (i.e. transparency) to show the overlap/similarity of the two traces, as shown in the example highcharter visualisation below:
+
+```{r, echo=FALSE}
+library(highcharter)
+data_scatter_plot %>% mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, max = 255), rgb(203, 24, 29, max = 255))
+  )) %>%
   scatter_plot(library = "highcharter",
-           x.column = ~na12882_2_s1.naive.baf,
-           marker.size = 10,
-           y.column = ~na12882_s1.naive.baf,
-           traces.column = ~type)
+               x.column = ~x,
+               y.column = ~y,
+               color.column = ~color,
+               traces.column = ~type) %>%
+  hc_xAxis(title = list(text = "Local AF (R1)"),
+               gridLineWidth = 1,
+               min = 0,
+               max = 1,
+               tickInterval = 0.25) %>%
+  hc_yAxis(min = 0,
+               max = 1,
+               tickInterval = 0.25,
+               title = list(text = "Local AF (R2)"))
 ```
 
-With plotly
+# Scatter plot specifications
+
+In scatter plots it is important to consider the following data:
+
+- traces: distinct groups of points, requiring distinct legend items.
+- colors: color attributes of the markers and legend items.
+
+The `oidnChaRts` `scatter_plot` function requires both a `trace.column` and `color.column` to be specified, because of oddities in many of the htmlwidget libraries in how colours are assigned at the marker and trace level. We add this information to the dataset using the tidyverse as follows:
 
 ```{r}
-data_scatter_plot %>%
+data_scatter_plot %>% mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, max = 255), rgb(203, 24, 29, max = 255))
+  ))
+```
+
+
+# Scatter plot
+
+The following will create a generic scatter plot with highcharter, note that internally `oidnChaRts` is using the Bubble Chart highchart type to allow point transparency.
+
+```{r}
+library(highcharter)
+data_scatter_plot %>% mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, max = 255), rgb(203, 24, 29, max = 255))
+  )) %>%
+  scatter_plot(library = "highcharter",
+               x.column = ~x,
+               y.column = ~y,
+               color.column = ~color,
+               traces.column = ~type)
+```
+
+Highcharter is slightly slow at displaying ~2000 bubbles, to improve the feel of the chart we could disable animation:
+
+```{r}
+data_scatter_plot %>% mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, 0.8, max = 255), rgb(203, 24, 29, 0.8, max = 255))
+  )) %>%
+  scatter_plot(library = "highcharter",
+               x.column = ~x,
+               y.column = ~y,
+               color.column = ~color,
+               traces.column = ~type) %>%
+  hc_plotOptions(series = list(animation = FALSE))
+```
+
+The following will create a generic scatter plot with plotly, which is significantly faster than highcharter:
+
+```{r}
+library(plotly)
+data_scatter_plot %>% mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, 0.5, max = 255), rgb(203, 24, 29, 0.5, max = 255))
+  )) %>%
   scatter_plot(library = "plotly",
-           x.column = ~na12882_2_s1.naive.baf,
-           marker.size = 10,
-           y.column = ~na12882_s1.naive.baf,
-           traces.column = ~type)
+               x.column = ~x,
+               y.column = ~y,
+               color.column = ~color,
+               traces.column = ~type)
 ```
-
-With rbokeh
-
-```{r}
-# data_scatter_plot %>%
-#   scatter_plot(library = "rbokeh",
-#            x.column = ~na12882_2_s1.naive.baf,
-#            marker.size = 10,
-#            y.column = ~na12882_s1.naive.baf,
-#            traces.column = ~type)
-```
-
 
 ## Tooltips
 
-The `highcharter` library embeds the entirety of the `data.frame` into the chart, and allows us to construct a tooltip as follows:
+The `highcharter` library embeds the entirety of the `data.frame` into the scatter plot, and allows us to construct a tooltip as shown below.
 
 ```{r}
 library(dplyr)
 data_scatter_plot %>%
+  mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, 1, max = 255), rgb(203, 24, 29, 1, max = 255))
+  )) %>%
 scatter_plot(library = "highcharter",
-           x.column = ~na12882_2_s1.naive.baf,
+           x.column = ~x,
            marker.size = 10,
-           y.column = ~na12882_s1.naive.baf,
-           traces.column = ~type) %>%
+           y.column = ~y,
+           traces.column = ~type,
+           color.column = ~color) %>%
   hc_tooltip(
         formatter = JS(
           "function(){
-          console.log(this);
           return '<b>' + this.series.name + '</b>' + 
                   '<br/>' +
-                  '<b>Position: </b>' + this.point.position +
+                  '<b>Chromosomal Position: </b>' + this.point.chromosome +
                   '<br/>' +
                   '<b>x: </b>' + this.x +
                   '<br/>' +
@@ -76,16 +165,23 @@ scatter_plot(library = "highcharter",
         ) 
 ```
 
-Unfortunately, the `plotly` library requires tooltips to be specified in the original `plot_ly` call and in the interest of general usability this has not been included in the `oidnChaRts` library. Tooltips could be added to a plotly chart natively as follows:
+Unfortunately, the `plotly` library requires tooltips to be specified in the original `plot_ly` call, as th `oidnChaRt` library is primarily for demonstration purposes there are no plans to specially support plotly tooltips. Instead, consider creating a plotly chart from scratch as follows:
 
 ```{r}
-# data_scatter_plot %>%
-#   plot_ly(
-#     x = ~na12882_2_s1.naive.baf,
-#     y = ~na12882_s1.naive.baf,
-#     color = ~type,
-#     colors = ~color,
-#     text = ~paste(position, chr)
-#   )
+data_scatter_plot %>%
+  mutate(color = plyr::mapvalues(
+    type,
+    from = c("Discordant", "Concordant"),
+    to = c(rgb(251, 106, 74, 1, max = 255), rgb(203, 24, 29, 1, max = 255))
+  )) %>%
+  plot_ly(
+    data = .,
+    x = ~x,
+    y = ~y,
+    color = ~type,
+    colors = unique(.[["color"]]),
+    text = ~paste("Chromosomal position: ", chromosome)
+  ) %>%
+  add_markers(alpha = 0.5)
 ```
 
