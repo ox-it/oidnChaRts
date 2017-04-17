@@ -51,7 +51,7 @@ hc_scatter_plot <- function(...) {
   
   trace_details <- data %>%
     select_(f_text(viz.args$traces.column),
-            "color") %>%
+            f_text(viz.args$color.column)) %>%
     unique() %>%
     rename_("name" = f_text(viz.args$traces.column)) %>%
     mutate(safe.name = make.names(name))
@@ -103,7 +103,12 @@ hc_scatter_plot <- function(...) {
         # Only way to limit bubble size.
         ## Remove the size from the tooltip
         tooltip = list(headerFormat = "<b>{series.name}</b><br>",
-                       pointFormat = "({point.x}, {point.y})")
+                       pointFormat = "({point.x}, {point.y})"),
+        marker = list(
+          fillOpacity = viz.args$fillOpacity,
+          lineColor = NULL,
+          lineWidth = 0
+        )
       )
     )
   
@@ -116,15 +121,19 @@ plotly_scatter_plot <- function(...) {
   viz.args <- list(...)[[1]]
   plot_data <- viz.args$data
   
+  trace_colors <- plot_data %>%
+    select_(f_text(viz.args$color.column)) %>%
+    unique() %>%
+    .[[1]]
   
   plot_data %>%
     plot_ly(
       x = viz.args$x.column,
       y = viz.args$y.column,
       color = viz.args$traces.column,
-      colors = ~color
+      colors = trace_colors
     ) %>%
-    add_markers(alpha = 0.5)
+    add_markers(alpha = viz.args$fillOpacity)
   
 }
 
@@ -138,6 +147,3 @@ rbokeh_scatter_plot <- function(...) {
               y = viz.args$y.column)
   
 }
-
-
-
