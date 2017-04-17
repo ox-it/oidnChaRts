@@ -8,23 +8,15 @@
 #' @importFrom stats as.formula
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
-#' @param x.column Column containing x-coordinates for data points
-#' @param y.column Column containing y-cordinates for data points
-#' @param traces.column Column containing the traces/trace names
 #' @param x.column Column containing x-coordinates for data points, default to x
 #' @param y.column Column containing y-cordinates for data points, default to y
 #' @param traces.column Column containing the traces/trace names, no default
 #' @param color.column Column containing trace colour, default to color
 #' @param marker.size Size of markers (circles, by default)
-#' @param fillOpacity Opacity of markers
 #' @param fillOpacity Opacity of markers, default 0.66
 #' @export
 scatter_plot <- function(data = NA,
                          library = "highcharter",
-                         x.column,
-                         y.column,
-                         marker.size = 1,
-                         traces.column) {
                          x.column = ~x,
                          y.column = ~y,
                          color.column = ~color,
@@ -32,10 +24,6 @@ scatter_plot <- function(data = NA,
                          traces.column,
                          fillOpacity = 0.66) {
   ## check library is supported
-  if (!library %in% c("highcharter", "plotly", "rbokeh")) {
-    stop(paste(
-      "The selected library is not supported, choose from; highcharter, plotly, rbokeh."
-    ))
   if (!library %in% c("highcharter", "plotly")) {
     stop(
       paste(
@@ -47,10 +35,6 @@ scatter_plot <- function(data = NA,
   viz.args <-
     mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
   
-  switch (library,
-          "highcharter" = hc_scatter_plot(viz.args),
-          "plotly" = plotly_scatter_plot(viz.args),
-          "rbokeh" = rbokeh_scatter_plot(viz.args))
   switch (
     library,
     "highcharter" = hc_scatter_plot(viz.args),
