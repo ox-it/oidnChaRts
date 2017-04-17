@@ -2,7 +2,7 @@
 #'
 #' A (long-formatted) dataset sourced from https://doi.org/10.6084/m9.figshare.3761562 which demonstrates the utility of grouped and stacked bar charts for comparing datasets which contain two-levels of categorisation, i.e. which types of jobs are most often listed on freelance websites in each continent?
 #'
-#' @format A data frame with 10 rows and 6 variables:
+#' @format A data frame with 691 rows and 5 variables:
 #' \describe{
 #'   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
 #'   \item{count}{Number of job adverts on the freelancer websites}
@@ -29,16 +29,16 @@
 #' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
 "data_line_chart"
 
-#' Scatter chart data
+#' Scatter plot data
 #'
-#' A (long-formatted) dataset designed to demonstrate different options for scatter charts.
+#' A (long-formatted) dataset designed to demonstrate different options for scatter plot
 #'
-#' @format A data frame with 100 rows and 4 variables:
+#' @format A data frame with 2163 rows and 7 variables:
 #' \describe{
-#'   \item{x}{x-values in sample charts}
-#'   \item{y}{y-values in sample charts}
-#'   \item{group}{Groups of points, analagous to different traces in the chart}
-#'   \item{color}{color for the trace/point}
+#'   \item{chromosome}{Chromosome and genomic position of gene}
+#'   \item{type}{Concordant (both sites are identical) or Discordant (mutations only in one replicate)}
+#'   \item{x}{Allelic frequencies of gene in replicate 1}
+#'   \item{y}{Allelic frequencies of gene in replicate 2}
 #' }
 #' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
 "data_scatter_plot"
