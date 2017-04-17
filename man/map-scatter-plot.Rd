@@ -6,8 +6,9 @@
 \alias{plotly_scatter_plot}
 \title{Scatter plot.}
 \usage{
-scatter_plot(data = NA, library = "highcharter", x.column, y.column,
-  marker.size = 1, traces.column)
+scatter_plot(data = NA, library = "highcharter", x.column = ~x,
+  y.column = ~y, color.column = ~color, marker.size = 5, traces.column,
+  fillOpacity = 0.66)
 
 hc_scatter_plot(...)
 
@@ -22,13 +23,15 @@ plotly_scatter_plot(...)
 
 \item{y.column}{Column containing y-cordinates for data points}
 
+\item{color.column}{Column containing trace colour, default to "color"}
+
 \item{marker.size}{Size of markers (circles, by default)}
 
 \item{traces.column}{Column containing the traces/trace names}
 
-\item{...}{all arguments provided to \code{scatter_plot}.}
+\item{fillOpacity}{Opacity of markers, default 0.66}
 
-\item{fillOpacity}{Opacity of markers}
+\item{...}{all arguments provided to \code{scatter_plot}.}
 
 \item{...}{all arguments provided to \code{scatter_plot}.}
 }
