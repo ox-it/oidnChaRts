@@ -11,8 +11,13 @@
 #' @param x.column Column containing x-coordinates for data points
 #' @param y.column Column containing y-cordinates for data points
 #' @param traces.column Column containing the traces/trace names
+#' @param x.column Column containing x-coordinates for data points, default to x
+#' @param y.column Column containing y-cordinates for data points, default to y
+#' @param traces.column Column containing the traces/trace names, no default
+#' @param color.column Column containing trace colour, default to color
 #' @param marker.size Size of markers (circles, by default)
 #' @param fillOpacity Opacity of markers
+#' @param fillOpacity Opacity of markers, default 0.66
 #' @export
 scatter_plot <- function(data = NA,
                          library = "highcharter",
@@ -20,11 +25,23 @@ scatter_plot <- function(data = NA,
                          y.column,
                          marker.size = 1,
                          traces.column) {
+                         x.column = ~x,
+                         y.column = ~y,
+                         color.column = ~color,
+                         marker.size = 5,
+                         traces.column,
+                         fillOpacity = 0.66) {
   ## check library is supported
   if (!library %in% c("highcharter", "plotly", "rbokeh")) {
     stop(paste(
       "The selected library is not supported, choose from; highcharter, plotly, rbokeh."
     ))
+  if (!library %in% c("highcharter", "plotly")) {
+    stop(
+      paste(
+        "The selected library is not supported, choose from; highcharter, plotly."
+      )
+    )
   }
   
   viz.args <-
@@ -34,6 +51,11 @@ scatter_plot <- function(data = NA,
           "highcharter" = hc_scatter_plot(viz.args),
           "plotly" = plotly_scatter_plot(viz.args),
           "rbokeh" = rbokeh_scatter_plot(viz.args))
+  switch (
+    library,
+    "highcharter" = hc_scatter_plot(viz.args),
+    "plotly" = plotly_scatter_plot(viz.args)
+  )
 }
 
 #' \code{hc_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
