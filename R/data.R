@@ -44,28 +44,24 @@
 "data_scatter_plot"
 
 
-#' Geolines data
+#' Geo Marker plot data
 #'
 #' A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
-#' The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.
+#' The dataset has been based on an academic dataset that will be published here https://doi.org/10.6084/m9.figshare.4516772
 #'
 #' @format A data frame with 617 rows and 9 variables:
 #' \describe{
-#'   \item{sender.location}{Country, City}
-#'   \item{sender.latitude}{Sender latitude}
-#'   \item{sender.longitude}{Sender longitude}
-#'   \item{receiver.latitude}{Receiver latitude}
-#'   \item{receiver.longitude}{Receiver longitude}
-#'   \item{receiver.location}{Country, City}
-#'   \item{date}{YYYY-MM-DD}
-#'   \item{journey}{Concatenated sender - receiver coordinate}
-#'   \item{number.of.letters}{Number of letters sent across route}
-#'   ...
+#'   \item{country}{Country in which point resides}
+#'   \item{city}{City in which point resides, with state name in brackets where appropriate}
+#'   \item{latitude}{Sender latitude}
+#'   \item{longitude}{Sender longitude}
+#'   \item{count}{Number of events at the location}
 #' }
-#' @source \url{http://www.idn.it.ox.ac.uk}
-"data_geo_lines_map"
+#' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
+"data_geo_marker_plot"
 
-#' Geopoints data
+
+#' Geolines data
 #'
 #' A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
 #' The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.

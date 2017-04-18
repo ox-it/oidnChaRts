@@ -3,13 +3,13 @@
 \docType{data}
 \name{data_scatter_plot}
 \alias{data_scatter_plot}
-\title{Scatter chart data}
-\format{A data frame with 100 rows and 4 variables:
+\title{Scatter plot data}
+\format{A data frame with 2163 rows and 7 variables:
 \describe{
-  \item{x}{x-values in sample charts}
-  \item{y}{y-values in sample charts}
-  \item{group}{Groups of points, analagous to different traces in the chart}
-  \item{color}{color for the trace/point}
+  \item{chromosome}{Chromosome and genomic position of gene}
+  \item{type}{Concordant (both sites are identical) or Discordant (mutations only in one replicate)}
+  \item{x}{Allelic frequencies of gene in replicate 1}
+  \item{y}{Allelic frequencies of gene in replicate 2}
 }}
 \source{
 \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
@@ -18,6 +18,6 @@
 data_scatter_plot
 }
 \description{
-A (long-formatted) dataset designed to demonstrate different options for scatter charts.
+A (long-formatted) dataset designed to demonstrate different options for scatter plot
 }
 \keyword{datasets}
