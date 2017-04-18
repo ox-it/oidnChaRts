@@ -19,6 +19,14 @@ vignette: >
 
 Geo marker plots contain markers that highlight important geographic positions, the markers may differ in colour but do not use size as a channel for communicating data. For charts where geographic positions should be represented as circles of differing sizes, refer to `geo_bubble_chart` instead.
 
+```{r, echo=FALSE}
+data_geo_marker_plot %>%
+  geo_marker_plot(library = "leaflet",
+                  mouseover.text = ~city,
+                  popup.text = ~paste("Country:",country, "<br>", "City:", city))
+```
+
+
 As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
 
 # data_stacked_bar_chart
