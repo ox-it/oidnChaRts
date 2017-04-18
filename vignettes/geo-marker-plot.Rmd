@@ -1,0 +1,87 @@
+---
+title: "Geo Marker Plots"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# Overview of function
+
+`geo_marker_plot` can be used to create the following kinds of charts:
+
+- Geo marker plot
+
+Geo marker plots contain markers that highlight important geographic positions, the markers may differ in colour but do not use size as a channel for communicating data. For charts where geographic positions should be represented as circles of differing sizes, refer to `geo_bubble_chart` instead.
+
+As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
+
+# data_stacked_bar_chart
+
+```{r}
+library(oidnChaRts)
+```
+
+This vignette covers the use of geo marker plots for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.4516772. 
+
+```{r}
+head(data_geo_marker_plot)
+```
+
+The data is generated from a historical analysis of the letters sent between German migrants and their families between the 18th and 19th Centuries, the columns may be summarised as follows:
+
+- location.name: Country, City (state, if relevant)
+- latitude: Latitude of location
+- longitude: Longitude of location
+- count: number of times location 
+
+# Geo marker plot specifications
+
+In Geo marker plots the only channels of information (i.e. what can vary between data points) are as follows:
+
+- position: the longitude, latitude of the data point
+- colour: colour of the markers
+
+However, it must be noted that geo marker icons are typcially implemented as .png images and therefore it is not generally possible to have **n** different colours of markers. For this reason, the `geo_marker_plot` function provides absolutely minimal flexibility in the appearance of your output.
+
+At the time of writing (`r Sys.Date()`) the only library with good support for geo markers is `leaflet`. You're strongly recommended to build these charts from scratch, following the documentation here: [http://rstudio.github.io/leaflet/markers.html](http://rstudio.github.io/leaflet/markers.html).
+
+# Geo marker plot
+
+The following will create a generic geo marker plot with leaflet:
+
+```{r}
+data_geo_marker_plot %>%
+  geo_marker_plot(library = "leaflet")
+```
+
+## Mouseover text
+
+Mouseover text is supported in the leaflet library as follows:
+
+```{r}
+data_geo_marker_plot %>%
+  geo_marker_plot(library = "leaflet",
+                  mouseover.text = ~country)
+```
+
+## Popup text
+
+Popup text (which is shown when a marker is clicked) is supported for leaflet as follows:
+
+```{r}
+data_geo_marker_plot %>%
+  geo_marker_plot(library = "leaflet",
+                  mouseover.text = ~city,
+                  popup.text = ~paste("Country:",country, "<br>", "City:", city))
+```
+
+
+
+
+
