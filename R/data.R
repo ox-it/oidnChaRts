@@ -46,10 +46,26 @@
 
 #' Geo Marker plot data
 #'
-#' A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
+#' A (long-formatted) dataset designed to demonstrate different options for geo marker plots.
 #' The dataset has been based on an academic dataset that will be published here https://doi.org/10.6084/m9.figshare.4516772
 #'
-#' @format A data frame with 617 rows and 9 variables:
+#' @format A data frame with 157 rows and 5 variables:
+#' \describe{
+#'   \item{country}{Country in which point resides}
+#'   \item{city}{City in which point resides, with state name in brackets where appropriate}
+#'   \item{latitude}{Sender latitude}
+#'   \item{longitude}{Sender longitude}
+#'   \item{count}{Number of events at the location}
+#' }
+#' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
+"data_geo_marker_plot"
+
+#' Geo bubble chart data
+#'
+#' A (long-formatted) dataset designed to demonstrate different options for geo bubble charts.
+#' The dataset has been based on an academic dataset that will be published here https://doi.org/10.6084/m9.figshare.4516772
+#'
+#' @format A data frame with 157 rows and 5 variables:
 #' \describe{
 #'   \item{country}{Country in which point resides}
 #'   \item{city}{City in which point resides, with state name in brackets where appropriate}
