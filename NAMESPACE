@@ -2,6 +2,7 @@
 
 export(calendar_heatmap)
 export(geo_lines_map)
+export(geo_marker_plot)
 export(line_chart)
 export(scatter_plot)
 export(stacked_bar_chart)

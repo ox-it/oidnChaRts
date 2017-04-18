@@ -4,7 +4,7 @@
 \name{data_stacked_bar_chart}
 \alias{data_stacked_bar_chart}
 \title{Stacked bar chart data}
-\format{A data frame with 10 rows and 6 variables:
+\format{A data frame with 691 rows and 5 variables:
 \describe{
   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
   \item{count}{Number of job adverts on the freelancer websites}

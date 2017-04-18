@@ -19,15 +19,15 @@ plotly_scatter_plot(...)
 
 \item{library}{Which library to use, highchart is default.}
 
-\item{x.column}{Column containing x-coordinates for data points}
+\item{x.column}{Column containing x-coordinates for data points, default to x}
 
-\item{y.column}{Column containing y-cordinates for data points}
+\item{y.column}{Column containing y-cordinates for data points, default to y}
 
-\item{color.column}{Column containing trace colour, default to "color"}
+\item{color.column}{Column containing trace colour, default to color}
 
 \item{marker.size}{Size of markers (circles, by default)}
 
-\item{traces.column}{Column containing the traces/trace names}
+\item{traces.column}{Column containing the traces/trace names, no default}
 
 \item{fillOpacity}{Opacity of markers, default 0.66}
 

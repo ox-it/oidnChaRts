@@ -1,5 +1,5 @@
 ---
-title: "Charts"
+title: "Scatter Plots"
 author: "Martin John Hadley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
