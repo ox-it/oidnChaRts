@@ -53,8 +53,8 @@
 #' \describe{
 #'   \item{country}{Country in which point resides}
 #'   \item{city}{City in which point resides, with state name in brackets where appropriate}
-#'   \item{latitude}{Sender latitude}
-#'   \item{longitude}{Sender longitude}
+#'   \item{latitude}{latitude}
+#'   \item{longitude}{longitude}
 #'   \item{count}{Number of events at the location}
 #' }
 #' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
@@ -69,12 +69,12 @@
 #' \describe{
 #'   \item{country}{Country in which point resides}
 #'   \item{city}{City in which point resides, with state name in brackets where appropriate}
-#'   \item{latitude}{Sender latitude}
-#'   \item{longitude}{Sender longitude}
+#'   \item{latitude}{latitude}
+#'   \item{longitude}{longitude}
 #'   \item{count}{Number of events at the location}
 #' }
 #' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
-"data_geo_marker_plot"
+"data_geo_bubble_chart"
 
 
 #' Geolines data
@@ -85,15 +85,15 @@
 #' @format A data frame with 617 rows and 9 variables:
 #' \describe{
 #'   \item{sender.location}{Country, City}
-#'   \item{sender.latitude}{Sender latitude}
-#'   \item{sender.longitude}{Sender longitude}
-#'   \item{receiver.latitude}{Receiver latitude}
-#'   \item{receiver.longitude}{Receiver longitude}
-#'   \item{receiver.location}{Country, City}
+#'   \item{start.latitude}{start latitude}
+#'   \item{start.longitude}{start longitude}
+#'   \item{end.latitude}{end latitude}
+#'   \item{end.longitude}{end longitude}
+#'   \item{end.location}{Country, City}
 #'   \item{date}{YYYY-MM-DD}
-#'   \item{journey}{Concatenated sender - receiver coordinate}
+#'   \item{journey}{Concatenated start - end coordinate}
 #'   \item{number.of.letters}{Number of letters sent across route}
 #'   ...
 #' }
 #' @source \url{http://www.idn.it.ox.ac.uk}
-"data_geo_lines_map"
+"data_geo_lines_plot"
