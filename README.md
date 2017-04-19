@@ -13,7 +13,7 @@ Functions are in general called as follows:
 
 ``` r
 library(oidnChaRts)
-geo_lines_map(data_geo_lines_map, 
+geo_lines_plot(data_geo_lines_plot, 
               library = "leaflet")
 ```
 
