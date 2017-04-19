@@ -41,6 +41,8 @@ Geo lines plot is used to visualise journies between geolocations, specifically 
 
 The `geo_lines_plot` determines which locations are both "send" and "receive" locations and labels them appropriately.
 
+At the time of writing (`r Sys.Date()`) the only library with good support for geo lines is `leaflet`. Additional support for `highcharter` is planned in a future release.
+
 # Geo lines plot
 
 The following will create a generic geo bubble chart with leaflet, note that significant work is required to make legends in leaflet charts "active" and you are recommended to build such charts from scratch.
@@ -51,21 +53,17 @@ data_geo_lines_plot %>%
   geo_lines_plot(library = "leaflet")
 ```
 
+Note that this plot automatically includes a popup for termini, providing information about how often the location is listed as a send or/and receive location.
+
 ## Popup on geolines
 
-```{r}
-library(leaflet)
-data_geo_lines_plot %>%
-  geo_lines_plot(library = "leaflet",line.popup = ~start.location)
-```
-
-
-## Popup on termini ()
+Additional information may easily be added to the geolines via the `line.popup` argument:
 
 ```{r}
 library(leaflet)
 data_geo_lines_plot %>%
-  geo_lines_plot(library = "leaflet",line.popup = ~start.location)
+  geo_lines_plot(library = "leaflet",line.popup = ~paste(start.location, "to", end.location))
 ```
+
 
 
