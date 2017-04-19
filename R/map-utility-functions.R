@@ -21,3 +21,19 @@ guessLatLongCols <- function(names, stopOnFailure = TRUE) {
   
   list(lng = NA, lat = NA)
 }
+
+# Generates lines between two geo-locations, using the geosphere library
+geo_lines <- function(data, addStartEnd = TRUE, intermediate.points = 50){
+  gcLines <- geosphere::gcIntermediate(
+    data %>%
+      select_("start.longitude", "start.latitude"),
+    data %>%
+      select_("end.longitude", "end.latitude"),
+    n = intermediate.points,
+    sp = TRUE,
+    addStartEnd = addStartEnd
+  )
+  
+  sp::SpatialLinesDataFrame(gcLines, data = data)
+}
+
