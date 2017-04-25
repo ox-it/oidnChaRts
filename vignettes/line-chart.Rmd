@@ -10,20 +10,27 @@ vignette: >
 ---
 
 <!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+# Overview of function
 
-# Load the library
+`line_chart` can be used to create the following kinds of charts:
+
+- Line charts
+
+As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
+
+# data_stacked_bar_chart
+
+```{r}
+library(oidnChaRts)
+```
+
+This vignette covers the use of line charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.3761562. The dataset concerns the number of jobs advertised on a number of "freelance websites" on a specific date, here's how the data looks:
 
 ```{r}
 library(oidnChaRts)
 ```
 
 This is our dataset:
-
-```{r}
-
-
-
-```
 
 Initial call
 

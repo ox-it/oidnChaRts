@@ -21,9 +21,10 @@ Imports:
     leaflet,
     highcharter,
     plotly,
-    rbokeh
+    rbokeh,
+    scales
 URL: http://ox-it.github.io/OxfordIDN_htmlwidgets
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
     testthat

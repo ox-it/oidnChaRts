@@ -8,32 +8,38 @@
 #' @importFrom stats as.formula
 #' @param data A dataframe, must be long-formatted.
 #' @param library Which library to use, highchart is default.
-#' @param x.column Column containing x-coordinates for data points
-#' @param y.column Column containing y-cordinates for data points
-#' @param traces.column Column containing the traces/trace names
+#' @param x.column Column containing x-coordinates for data points, default to x
+#' @param y.column Column containing y-cordinates for data points, default to y
+#' @param traces.column Column containing the traces/trace names, no default
+#' @param color.column Column containing trace colour, default to color
 #' @param marker.size Size of markers (circles, by default)
-#' @param fillOpacity Opacity of markers
+#' @param fillOpacity Opacity of markers, default 0.66
 #' @export
 scatter_plot <- function(data = NA,
                          library = "highcharter",
-                         x.column,
-                         y.column,
-                         marker.size = 1,
-                         traces.column) {
+                         x.column = ~x,
+                         y.column = ~y,
+                         color.column = ~color,
+                         marker.size = 5,
+                         traces.column,
+                         fillOpacity = 0.66) {
   ## check library is supported
-  if (!library %in% c("highcharter", "plotly", "rbokeh")) {
-    stop(paste(
-      "The selected library is not supported, choose from; highcharter, plotly, rbokeh."
-    ))
+  if (!library %in% c("highcharter", "plotly")) {
+    stop(
+      paste(
+        "The selected library is not supported, choose from; highcharter, plotly."
+      )
+    )
   }
   
   viz.args <-
     mget(names(formals()), sys.frame(sys.nframe())) # http://stackoverflow.com/a/14398674/1659890
   
-  switch (library,
-          "highcharter" = hc_scatter_plot(viz.args),
-          "plotly" = plotly_scatter_plot(viz.args),
-          "rbokeh" = rbokeh_scatter_plot(viz.args))
+  switch (
+    library,
+    "highcharter" = hc_scatter_plot(viz.args),
+    "plotly" = plotly_scatter_plot(viz.args)
+  )
 }
 
 #' \code{hc_scatter_plot} should not be used directly, it generates a scatter plot using highcharter.
@@ -45,7 +51,7 @@ hc_scatter_plot <- function(...) {
   
   trace_details <- data %>%
     select_(f_text(viz.args$traces.column),
-            "color") %>%
+            f_text(viz.args$color.column)) %>%
     unique() %>%
     rename_("name" = f_text(viz.args$traces.column)) %>%
     mutate(safe.name = make.names(name))
@@ -97,7 +103,12 @@ hc_scatter_plot <- function(...) {
         # Only way to limit bubble size.
         ## Remove the size from the tooltip
         tooltip = list(headerFormat = "<b>{series.name}</b><br>",
-                       pointFormat = "({point.x}, {point.y})")
+                       pointFormat = "({point.x}, {point.y})"),
+        marker = list(
+          fillOpacity = viz.args$fillOpacity,
+          lineColor = NULL,
+          lineWidth = 0
+        )
       )
     )
   
@@ -110,15 +121,19 @@ plotly_scatter_plot <- function(...) {
   viz.args <- list(...)[[1]]
   plot_data <- viz.args$data
   
+  trace_colors <- plot_data %>%
+    select_(f_text(viz.args$color.column)) %>%
+    unique() %>%
+    .[[1]]
   
   plot_data %>%
     plot_ly(
       x = viz.args$x.column,
       y = viz.args$y.column,
       color = viz.args$traces.column,
-      colors = ~color
+      colors = trace_colors
     ) %>%
-    add_markers(alpha = 0.5)
+    add_markers(alpha = viz.args$fillOpacity)
   
 }
 
@@ -132,6 +147,3 @@ rbokeh_scatter_plot <- function(...) {
               y = viz.args$y.column)
   
 }
-
-
-

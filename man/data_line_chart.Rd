@@ -22,4 +22,3 @@ data_line_chart
 A (long-formatted) dataset designed to demonstrate different options for line charts.
 }
 \keyword{datasets}
-

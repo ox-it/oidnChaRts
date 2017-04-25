@@ -1,15 +1,18 @@
 #' Stacked bar chart data
 #'
-#' A (long-formatted) dataset designed to demonstrate different options for stacked bar charts.
+#' A (long-formatted) dataset sourced from https://doi.org/10.6084/m9.figshare.3761562 which demonstrates the utility of grouped and stacked bar charts for comparing datasets which contain two-levels of categorisation, i.e. which types of jobs are most often listed on freelance websites in each continent?
 #'
-#' @format A data frame with 10 rows and 6 variables:
+#' @format A data frame with 691 rows and 5 variables:
 #' \describe{
-#'   \item{country}{country where activity took place}
-#'   \item{activity}{type of activity}
-#'   \item{hours}{hours spent performing activity}
+#'   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
+#'   \item{count}{Number of job adverts on the freelancer websites}
+#'   \item{country}{Country listed for job poster}
+#'   \item{country_group}{groupings determined by the researchers, i.e. "other Europe" and "all Africa"}
+#'   \item{occupation}{classification of the job posting}
 #' }
 #' @source \url{http://www.diamondse.info/}
 "data_stacked_bar_chart"
+
 
 #' Line chart data
 #'
@@ -26,19 +29,52 @@
 #' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
 "data_line_chart"
 
-#' Scatter chart data
+#' Scatter plot data
 #'
-#' A (long-formatted) dataset designed to demonstrate different options for scatter charts.
+#' A (long-formatted) dataset designed to demonstrate different options for scatter plot
 #'
-#' @format A data frame with 100 rows and 4 variables:
+#' @format A data frame with 2163 rows and 7 variables:
 #' \describe{
-#'   \item{x}{x-values in sample charts}
-#'   \item{y}{y-values in sample charts}
-#'   \item{group}{Groups of points, analagous to different traces in the chart}
-#'   \item{color}{color for the trace/point}
+#'   \item{chromosome}{Chromosome and genomic position of gene}
+#'   \item{type}{Concordant (both sites are identical) or Discordant (mutations only in one replicate)}
+#'   \item{x}{Allelic frequencies of gene in replicate 1}
+#'   \item{y}{Allelic frequencies of gene in replicate 2}
 #' }
 #' @source \url{https://dx.doi.org/10.6084/m9.figshare.4555441.v1}
 "data_scatter_plot"
+
+
+#' Geo Marker plot data
+#'
+#' A (long-formatted) dataset designed to demonstrate different options for geo marker plots.
+#' The dataset has been based on an academic dataset that will be published here https://doi.org/10.6084/m9.figshare.4516772
+#'
+#' @format A data frame with 157 rows and 5 variables:
+#' \describe{
+#'   \item{country}{Country in which point resides}
+#'   \item{city}{City in which point resides, with state name in brackets where appropriate}
+#'   \item{latitude}{latitude}
+#'   \item{longitude}{longitude}
+#'   \item{count}{Number of events at the location}
+#' }
+#' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
+"data_geo_marker_plot"
+
+#' Geo bubble chart data
+#'
+#' A (long-formatted) dataset designed to demonstrate different options for geo bubble charts.
+#' The dataset has been based on an academic dataset that will be published here https://doi.org/10.6084/m9.figshare.4516772
+#'
+#' @format A data frame with 157 rows and 5 variables:
+#' \describe{
+#'   \item{country}{Country in which point resides}
+#'   \item{city}{City in which point resides, with state name in brackets where appropriate}
+#'   \item{latitude}{latitude}
+#'   \item{longitude}{longitude}
+#'   \item{count}{Number of events at the location}
+#' }
+#' @source \url{https://doi.org/10.6084/m9.figshare.4516772}
+"data_geo_bubble_chart"
 
 
 #' Geolines data
@@ -49,36 +85,15 @@
 #' @format A data frame with 617 rows and 9 variables:
 #' \describe{
 #'   \item{sender.location}{Country, City}
-#'   \item{sender.latitude}{Sender latitude}
-#'   \item{sender.longitude}{Sender longitude}
-#'   \item{receiver.latitude}{Receiver latitude}
-#'   \item{receiver.longitude}{Receiver longitude}
-#'   \item{receiver.location}{Country, City}
+#'   \item{start.latitude}{start latitude}
+#'   \item{start.longitude}{start longitude}
+#'   \item{end.latitude}{end latitude}
+#'   \item{end.longitude}{end longitude}
+#'   \item{end.location}{Country, City}
 #'   \item{date}{YYYY-MM-DD}
-#'   \item{journey}{Concatenated sender - receiver coordinate}
+#'   \item{journey}{Concatenated start - end coordinate}
 #'   \item{number.of.letters}{Number of letters sent across route}
 #'   ...
 #' }
 #' @source \url{http://www.idn.it.ox.ac.uk}
-"data_geo_lines_map"
-
-#' Geopoints data
-#'
-#' A (long-formatted) dataset designed to demonstrate different options for geoline charts (great circles between points on a map).
-#' The dataset has been based on an academic dataset that will be cited after the embargo period has come to an end.
-#'
-#' @format A data frame with 617 rows and 9 variables:
-#' \describe{
-#'   \item{sender.location}{Country, City}
-#'   \item{sender.latitude}{Sender latitude}
-#'   \item{sender.longitude}{Sender longitude}
-#'   \item{receiver.latitude}{Receiver latitude}
-#'   \item{receiver.longitude}{Receiver longitude}
-#'   \item{receiver.location}{Country, City}
-#'   \item{date}{YYYY-MM-DD}
-#'   \item{journey}{Concatenated sender - receiver coordinate}
-#'   \item{number.of.letters}{Number of letters sent across route}
-#'   ...
-#' }
-#' @source \url{http://www.idn.it.ox.ac.uk}
-"data_geo_lines_map"
+"data_geo_lines_plot"
