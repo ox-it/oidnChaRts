@@ -97,3 +97,28 @@
 #' }
 #' @source \url{http://www.idn.it.ox.ac.uk}
 "data_geo_lines_plot"
+
+#' World Shapefiles
+#'
+#' A SpatialPolygonsDataFrame dataset sourced from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/ which includes shapefiles for all countries, with a scale of 1:50m.
+#' 
+#' Note that data_world_shapefiles@data is a data.frame containing exclusively identifying information about each country, i.e. it does not contain any information on the population or other metrics of the country.
+#' 
+#' At present, the best way to subset SpatialPolygonsDataFrame objects is with base R, i.e. data_world_shapefiles[data_world_shapefiles$continent %in% c("Asia"), ] will return only those countries where the continent is listed as "Asia".
+#'
+#'
+#' @format A SpatialPolygonsDataFrame with 241 elements, the @data subcomponent is a data.frame containing 241 observatiosn with 9 variables:
+#' \describe{
+#'   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
+#'   \item{name}{Abbreviated Name of the country, i.e. N. Mariana Is. vs Northern Mariana Islands}
+#'   \item{name_long}{Full name of the country, i.e. N. Mariana Is. vs Northern Mariana Islands}
+#'   \item{type}{Type of country, i.e. Sovereign country, Dependency, etc}
+#'   \item{continent}{Continent country belongs to}
+#'   \item{region_un}{Region assignment from the UN}
+#'   \item{subregion}{Subregion country belongs to, as per UN}
+#'   \item{sovereignt}{Full name of country holding sovereignty over the country}
+#'   \item{subunit}{UN subunit the country belongs to}
+#'   \item{postal}{Postal shortcode for country}
+#' }
+#' @source \url{http://www.diamondse.info/}
+"data_stacked_bar_chart"
