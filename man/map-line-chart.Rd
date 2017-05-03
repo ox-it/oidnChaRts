@@ -3,12 +3,15 @@
 \name{line_chart}
 \alias{line_chart}
 \alias{hc_line_chart}
+\alias{plotly_line_chart}
 \title{Line Charts.}
 \usage{
 line_chart(data = NA, library = "highcharter", x.column, y.column,
-  traces.column, markers = TRUE)
+  traces.column, color.column, markers = TRUE)
 
 hc_line_chart(...)
+
+plotly_line_chart(...)
 }
 \arguments{
 \item{data}{A dataframe, must be long-formatted.}
@@ -24,9 +27,13 @@ hc_line_chart(...)
 \item{markers}{Show plot markers on lines? TRUE or FALSE.}
 
 \item{...}{all arguments provided to \code{line_chart}.}
+
+\item{...}{all arguments provided to \code{line_chart}.}
 }
 \description{
 \code{stacked_bar_chart} creates a stacked bar chart using the specified library, which can be used in the library's \%>\% workflow. Data must be provided in long format.
 
-\code{hc_line_chart} should not be used directly, it generates a stacked barchart using Plotly.
+\code{hc_line_chart} should not be used directly, it generates a line chart using Highchart.
+
+\code{plotly_line_chart} should not be used directly, it generates a line chart using using Plotly.
 }

@@ -1,0 +1,67 @@
+---
+title: "Overview of oidnChaRts"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+# What is oidnChaRts useful for?
+
+oidnChaRts is designed to support the following use cases:
+
+- Provide advice on which charts to use for each "kind" of data
+- Allow R users to easily compare how different htmlwidgets display different kinds of charts
+- Simple tool for creating generic charts
+
+You might find that the output of oidnChaRts is sufficiently useful for your visualisation needs, but it's specifically not designed to create an infinitely flexible manner to create chart X in different libraries - because that would be very difficult.
+
+# Combining oidnChaRts together
+
+All good `htmlwidget` libraries use the `%>%` (pipe) operator to provide a consistent method to construct/add layers to charts. This is achieved by insisting on the first argument of most funtions being a htmlwidget of the kind you're building. 
+
+As an example, consider a `htmlwidget` library called `pokedexeR` which creates a display of your Pokémon data using the following functions:
+
+- pokedex; creates a htmlwidget of the kind `pokedexeR` containing your Pokémon data
+- pokedexRegion; specifies the origin of the Pokédex to use, each region has a very distinctive formfactor
+- pokedexResolution; specifies the effective resolution of the Pokédex display
+
+These functions would be piped together as follows:
+
+```{r, eval=FALSE}
+my_pokemon_data %>%
+  pokedex() %>%
+  pokedexRegion(region = "Kanto") %>%
+  pokedexResolution(resolution = "160x144")
+```
+
+The functions in the `oidnChaRts` library that output charts are specifically designed **not** to support this workflow, i.e. one cannot do the following:
+
+```{r, eval = FALSE}
+## This will fail, please read the explanation above
+my_data %>%
+  scatter_plot(library = "highcharter") %>% # function from oidnChaRts
+  line_chart(library = "highcharter") %>% # function from oidnChaRts
+  hc_tooltip(shared = TRUE) # function directly from highcharter
+```
+
+However, in general one can take the output of a `oidnChaRts` function and use it within the htmlwidget library's own functions:
+
+```{r}
+library(leaflet)
+data_geo_lines_plot %>%
+  geo_lines_plot() %>%
+  addMarkers(lat = 0, lng = 0, label = "Null Island!")
+```
+
+
+
+
+
+
+
+

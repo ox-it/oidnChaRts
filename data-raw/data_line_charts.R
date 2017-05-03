@@ -1,6 +1,6 @@
 ## data_line_chart
 ## This dataset comes from https://doi.org/10.6084/m9.figshare.4555441
-## Scatter plots provide a natural visualisation option for this data.
+## Line charts provide a natural visualisation option for this data, as there are a number of series with dependent (y-axis) and independent (x-axis) measures
 
 library(rfigshare)
 library(tidyverse)
@@ -20,27 +20,24 @@ colnames(data_line_chart) <- tolower(colnames(data_line_chart))
 
 data_line_chart <- data_line_chart %>%
   rename(x = af,
-         y = fdr) %>%
+         y = fdr,
+         trace = series) %>%
   select(-tpr)
-
-x.column = ~af,
-y.column = ~fdr,
-
-
-
-## ======================== data_line_chart
-
-data_line_chart <- read_tsv("data-raw/thesaurus.fig2.tsv")
-colnames(data_line_chart) <- tolower(colnames(data_line_chart))
-
-line_colours_scheme <- read_csv("data-raw/color_scheme.csv")
-colnames(line_colours_scheme) <-
-  tolower(make.names(colnames(line_colours_scheme)))
-
-data_line_chart <- data_line_chart %>%
-  mutate(color = plyr::mapvalues(series,
-                                 line_colours_scheme$name,
-                                 line_colours_scheme$colour))
+# 
+# 
+# ## ======================== data_line_chart
+# 
+# data_line_chart <- read_tsv("data-raw/thesaurus.fig2.tsv")
+# colnames(data_line_chart) <- tolower(colnames(data_line_chart))
+# 
+# line_colours_scheme <- read_csv("data-raw/color_scheme.csv")
+# colnames(line_colours_scheme) <-
+#   tolower(make.names(colnames(line_colours_scheme)))
+# 
+# data_line_chart <- data_line_chart %>%
+#   mutate(color = plyr::mapvalues(series,
+#                                  line_colours_scheme$name,
+#                                  line_colours_scheme$colour))
 
 save(data_line_chart,
      file = "data/data_line_chart.rdata")

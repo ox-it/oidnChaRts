@@ -16,6 +16,8 @@ vignette: >
 
 - Line charts
 
+Line charts contain multiple series comprised of markers connected by straight (**not** splines) lines. Each series is assigned a single colour used to colour both the markers and connecting lines, each trace has a distinct marker type. 
+
 As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
 
 # data_stacked_bar_chart
@@ -24,33 +26,191 @@ As with all `oidnChaRts` libraries, you are advised to load the htmlwidget libra
 library(oidnChaRts)
 ```
 
-This vignette covers the use of line charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.3761562. The dataset concerns the number of jobs advertised on a number of "freelance websites" on a specific date, here's how the data looks:
+This vignette covers the use of line charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.4555441. To explain the details of the research dataset we would require domain specific expertise, asline charts are typically used for scientific data this dataset has been specifically chosen because a logarithmic y-axis is required to best display the data.
+
 
 ```{r}
-library(oidnChaRts)
+data_line_chart
 ```
 
-This is our dataset:
+The columns may be summarised as follows:
 
-Initial call
+- trace: Series to which the data belongs
+- x: Independent variable (i.e the cause, though this is often "time" as it can be inferred that "the progress of time causes y to change")
+- y: Dependent variable (i.e. the effect, or the thing which happens due to the independent variable being changed)
+
+# Line chart specifications
+
+In line charts it is important to consider the following data:
+
+- traces: distinct groups of markers connected by lines, requiring distinct legend items.
+- colors: color attribute of each trace.
+
+The `oidnChaRts` `line_chart` function requires both a `trace.column` and `color.column` to be specified, because of oddities in many of the htmlwidget libraries in how colours are assigned at the marker and trace level. We add this information to the dataset using the tidyverse as follows:
 
 ```{r}
-library(highcharter)
-line_chart(data = data_line_chart,
-           library = "highcharter",
-           x.column = ~af,
-           y.column = ~fdr,
-           traces.column = ~series) %>%
-  hc_yAxis(
-        type = "logarithmic",
-        title = list(text = "FDR"),
-        labels = list(
-          formatter = JS(
-            "function () {
-            var label = this.axis.defaultLabelFormatter.call(this);
-            return this.value.toExponential(2);
-            }"
-))) %>%
-  hc_plotOptions(series = list(marker = list(symbol = "circle")))
+data_line_chart$series %>% unique() %>% dput()
+```
+
+```{r}
+library(tidyverse)
+data_line_chart <- data_line_chart %>% 
+  mutate(color = plyr::mapvalues(
+    trace,
+    from = c("[MQ 16] Local", "[MQ 16] Thesaurus", "[MQ 1] Local", "[MQ 1] Thesaurus", "Mutect"),
+    to = c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E")
+  ))
+```
+
+# Line plot
+
+The following will create a generic line chart with highcharter:
+
+```{r}
+data_line_chart %>%
+  line_chart(
+    library = "highcharter",
+    x.colum = ~x,
+    y.column = ~y,
+    traces.column = ~trace,
+    color.column = ~color
+  )
+```
+
+The "Mutect" trace appears to be with the current y-axis setup, we need to set the axis to be logarithmic. It's also useful to add a shared tooltip, which is simple with highcharter:
+
+```{r}
+data_line_chart %>%
+  line_chart(
+    library = "highcharter",
+    x.colum = ~x,
+    y.column = ~y,
+    traces.column = ~trace,
+    color.column = ~color
+  ) %>% hc_yAxis(
+        max = 1,
+        type = "logarithmic") %>%
+  hc_tooltip(split = TRUE)
+```
+
+A line chart can be created with plotly as follows, note that the necessary code to scale the y axis logarithmically.
+
+```{r}
+data_line_chart %>%
+  line_chart(
+    library = "plotly",
+    x.colum = ~x,
+    y.column = ~y,
+    traces.column = ~trace,
+    color.column = ~color
+  ) %>%
+  plotly::layout(yaxis = list(type = "log"))
+```
+
+## Tooltips
+
+The `highcharter` library embeds the entirety of the `data.frame` into the line_chart, unfortunately the necessary JavaScript required to format a shared tooltip is beyond the assumed knowledge of this library. Therefore, the example below shows how additional content may be added to the tooltip for individual markers:
+
+```{r}
+data_line_chart %>%
+  mutate(customColumn = 1:nrow(data_line_chart)) %>%
+  line_chart(
+    library = "highcharter",
+    x.colum = ~x,
+    y.column = ~y,
+    traces.column = ~trace,
+    color.column = ~color
+  ) %>% hc_yAxis(
+        max = 1,
+        type = "logarithmic") %>%
+  hc_tooltip(
+    formatter = JS("function(){
+                   console.log(this);
+                      return '<b>Trace: </br>' + this.series.name + 
+                              '<br/>' +
+                              '<b>Custom Column: </b>' + this.point.customColumn +
+                              '<br/>' +
+                              '<b>x: </b>' + this.point.x;
+                              '<br/>' +
+                              '<b>y: </b>' + this.point.y;
+                   }")
+  )
+```
+
+
+```{r, eval=FALSE,echo=FALSE}
+## TODO: Make this work
+data_line_chart %>%
+  mutate(custom.text = letters[1:nrow(data_line_chart)]) %>%
+  line_chart(
+    library = "highcharter",
+    x.colum = ~x,
+    y.column = ~y,
+    traces.column = ~trace,
+    color.column = ~color
+  ) %>% hc_yAxis(
+        max = 1,
+        type = "logarithmic") %>%
+  hc_tooltip(split = TRUE,
+             useHTML = TRUE,
+             formatter = JS(
+          "function(){
+            var points = this.points;
+            var pointsLength = points.length;
+            var outputTooltip = '';
+            var index;
+            console.log(this.points);
+            console.log(pointsLength);
+
+            for(index = 0; index < pointsLength; index += 1) {
+
+console.log('this');
+console.log(index);
+console.log(this.points[0]);
+
+              var currentPoint = this.points[index];
+
+console.log('curent point below');
+console.log(currentPoint);
+
+              outputTooltip += '<p>' + currentPoint.series.name + '</p>';
+
+console.log('curent outputTooltip below');
+console.log(outputTooltip);
+            
+}
+console.log('final outputTooltip below');
+console.log(outputTooltip);
+            return outputTooltip;
+        }"
+          ))
+# 
+#  tooltip: {
+#         shared: true,
+#         useHTML: true,
+#         headerFormat: '<small>{point.key}</small><table>',
+#         pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+#             '<td style="text-align: right"><b>{point.y} EUR</b></td></tr>',
+#         footerFormat: '</table>',
+#         valueDecimals: 2
+#     },
+```
+
+
+Unfortunately, the `plotly` library requires tooltips to be specified in the original `plot_ly` call, as the `oidnChaRt` library is primarily for demonstration purposes there are no plans to specially support plotly tooltips. Instead, consider creating a plotly chart from scratch as follows:
+
+```{r}
+plot_ly() %>%
+  add_trace(data = data_line_chart %>%
+              mutate(custom.text = letters[1:nrow(data_line_chart)]),
+            x = ~x,
+            y = ~y,
+            color = ~trace,
+            colors = ~color,
+            mode='lines+markers', 
+            type='scatter',
+            text = ~paste("custom text: ", custom.text)) %>%
+  plotly::layout(yaxis = list(type = "log"))
+
 ```
 
