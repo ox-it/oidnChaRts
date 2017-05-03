@@ -18,6 +18,7 @@ line_chart <- function(data = NA,
                        x.column,
                        y.column,
                        traces.column,
+                       color.column,
                        markers = TRUE) {
   ## check library is supported
   if (!library %in% c("highcharter", "plotly")) {
@@ -32,11 +33,11 @@ line_chart <- function(data = NA,
   switch (library,
           "highcharter" = hc_line_chart(viz.args),
           "plotly" = {
-            hc_line_chart(viz.args)
+            plotly_line_chart(viz.args)
           })
 }
 
-#' \code{hc_line_chart} should not be used directly, it generates a stacked barchart using Plotly.
+#' \code{hc_line_chart} should not be used directly, it generates a line chart using Highchart.
 #' @rdname map-line-chart
 #' @param ... all arguments provided to \code{line_chart}.
 hc_line_chart <- function(...) {
@@ -44,47 +45,46 @@ hc_line_chart <- function(...) {
   viz.args <- list(...)[[1]]
   data <- viz.args$data
 
-  trace_details <- data %>%
-    select_(f_text(viz.args$traces.column),
-            "color") %>%
-    unique() %>%
-    rename_("name" = f_text(viz.args$traces.column)) %>%
-    mutate(safe.name = make.names(name))
 
-  # traces_data <- data %>%
-  #   select_(
-  #     f_text(viz.args$x.column),
-  #     f_text(viz.args$y.column),
-  #     f_text(viz.args$traces.column)
-  #   )
-
+  ## TODO: Highchart hcaes doesn't have NSE yet, reimplement this so it's not HORRIBLE.
   traces_data <- data %>%
-    spread_(f_text(viz.args$traces.column),
-            f_text(viz.args$y.column))
+    rename_("x" = viz.args$x.column,
+            "y" = viz.args$y.column,
+            "color" = viz.args$color.column,
+            "group" = viz.args$traces.column)
+  
+  group_colors <- traces_data %>%
+    select(color) %>%
+    unique() %>%
+    .[[1]]
 
-  colnames(traces_data) <- make.names(colnames(traces_data))
+  highchart() %>%
+    hc_add_series(traces_data,
+                  "line",
+                  hcaes(
+                    x = x,
+                    y = y,
+                    group = group
+                  )) %>%
+    hc_colors(group_colors)
+  
+}
 
-  hc <- highchart()
-  lapply(trace_details[["safe.name"]],
-         function(safe.series.name){
-
-           hc <<- hc %>%
-             df_to_hc_xy_series(
-               data = traces_data,
-               type = "line",
-               x.column = f_text(viz.args$x.column),
-               trace = safe.series.name,
-               color = trace_details %>%
-                 filter(safe.name == safe.series.name) %>%
-                 select(color) %>%
-                 .[[1]],
-               name = trace_details %>%
-                 filter(safe.name == safe.series.name) %>%
-                 select(name) %>%
-                 .[[1]]
-             )
-
-         })
-  hc
-
+#' \code{plotly_line_chart} should not be used directly, it generates a line chart using using Plotly.
+#' @rdname map-line-chart
+#' @param ... all arguments provided to \code{line_chart}.
+plotly_line_chart <- function(...) {
+  
+  viz.args <- list(...)[[1]]
+  data <- viz.args$data
+ 
+  plot_ly() %>%
+    add_trace(data = data,
+              x = viz.args$x.column,
+              y = viz.args$y.column,
+              color = viz.args$traces.column,
+              colors = viz.args$color.column,
+              mode='lines+markers', 
+              type='scatter')
+   
 }
