@@ -12,6 +12,7 @@ LazyData: TRUE
 Imports:
     lazyeval,
     stats,
+    sp,
     tidyverse,
     dplyr (>= 0.3.0.1),
     tidyr,
