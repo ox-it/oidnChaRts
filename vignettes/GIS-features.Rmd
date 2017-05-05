@@ -1,5 +1,5 @@
 ---
-title: "GIS features (shapefiles, geolines) and R"
+title: "GIS Features"
 author: "Martin John Hadley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -8,7 +8,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
 <!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
 
 # GIS Features and R
@@ -57,7 +56,7 @@ In addition, you may require additional information to be specified for each reg
 
 However, it's also extremely important to note that shapefiles may or may not contain *projection* data. You're thoroughly encouraged to obtain unprojected shapefiles, using the WGS84 datum standard (see https://en.wikipedia.org/wiki/World_Geodetic_System). Most example data in this library is obtained from unprojected ESRI shapefiles, you can check if your shapefiles are similarly formatted using this code
 
-```{r}
+```{r, eval = FALSE}
 library("sp")
 library("oidnChaRts")
 # proj4string(data_world_shapefiles)
@@ -108,21 +107,21 @@ summary(world_shapefiles)
 
 The imported ESRI shapefiles are held in R as a `SpatialPolygonsDataFrame` - which has a complex structure:
 
-- world_shapefiles@data: Information about each *region* in the shapefile, for instance the name and population of the region
-- world_shapefiles@polygons: The polygons that define each region, what is used by plotting functions.
-- world_shapefiles@plotOrder: The order in which polygons should be plotted, important if the shapefile includes features within a country like lakes.
-- world_shapefiles@bbox: The bounding box for the data points, i.e. what set of geographic points completely contain the polygons in the shapefiles.
-- world_shapefiles@proj4string: The projection which should be used when working with the polygons.
+- world_shapefiles\@data: Information about each *region* in the shapefile, for instance the name and population of the region
+- world_shapefiles\@polygons: The polygons that define each region, what is used by plotting functions.
+- world_shapefiles\@plotOrder: The order in which polygons should be plotted, important if the shapefile includes features within a country like lakes.
+- world_shapefiles\@bbox: The bounding box for the data points, i.e. what set of geographic points completely contain the polygons in the shapefiles.
+- world_shapefiles\@proj4string: The projection which should be used when working with the polygons.
 
 Our example dataset includes quite a lot of information, for instance which continent each country belongs to:
 
-```{r}
+```{r, eval = FALSE}
 head(world_shapefiles@data)
 ```
 
 Unfortunately, it is *not* possible to use the `tidyverse` for manipulating the `SpatialPolygonsDataFrame` object - instead one must use base R. For instance, if we were interested in extracting only those countries in Asia:
 
-```{r, eval = F}
+```{r, eval = FALSE}
 asia_shapefiles <- world_shapefiles[world_shapefiles$continent %in% c("Asia"), ]
 summary(asia_shapefiles)
 ```
