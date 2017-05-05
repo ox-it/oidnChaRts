@@ -3,7 +3,6 @@
 \docType{data}
 \name{data_stacked_bar_chart}
 \alias{data_stacked_bar_chart}
-\alias{data_stacked_bar_chart}
 \title{Stacked bar chart data}
 \format{A data frame with 691 rows and 5 variables:
 \describe{
@@ -15,22 +14,11 @@
 }}
 \source{
 \url{http://www.diamondse.info/}
-
-\url{http://www.diamondse.info/}
 }
 \usage{
-data_stacked_bar_chart
-
 data_stacked_bar_chart
 }
 \description{
 A (long-formatted) dataset sourced from https://doi.org/10.6084/m9.figshare.3761562 which demonstrates the utility of grouped and stacked bar charts for comparing datasets which contain two-levels of categorisation, i.e. which types of jobs are most often listed on freelance websites in each continent?
-
-A SpatialPolygonsDataFrame dataset sourced from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/ which includes shapefiles for all countries, with a scale of 1:50m.
-}
-\details{
-Note that data_world_shapefiles@data is a data.frame containing exclusively identifying information about each country, i.e. it does not contain any information on the population or other metrics of the country.
-
-At present, the best way to subset SpatialPolygonsDataFrame objects is with base R, i.e. data_world_shapefiles[data_world_shapefiles$continent %in% c("Asia"), ] will return only those countries where the continent is listed as "Asia".
 }
 \keyword{datasets}

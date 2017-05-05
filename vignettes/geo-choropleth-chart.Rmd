@@ -1,5 +1,5 @@
 ---
-title: "Geo Marker Plots"
+title: "Geo Choropleth Chart"
 author: "Martin John Hadley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -13,32 +13,47 @@ vignette: >
 
 # Overview of function
 
-`geo_marker_plot` can be used to create the following kinds of charts:
+`geo_choropleth_chart` can be used to create the following kinds of charts:
 
-- Geo marker plot
+- Geo choropleth charth
 
-Geo marker plots contain markers that highlight important geographic positions, the markers may differ in colour but do not use size as a channel for communicating data. For charts where geographic positions should be represented as circles of differing sizes, refer to `geo_bubble_chart` instead.
+Geo choropleth charts contain geographic regions (i.e. countries) which are shaded/coloured according to a shared property of all regions (i.e. population). Choropleth are extrmely popular charts for comparing regions to one another, however they require significant effort to be put into curating the shapefiles that constitute the geographic regions.
 
 ```{r, echo=FALSE}
-data_geo_marker_plot %>%
-  geo_marker_plot(library = "leaflet",
-                  mouseover.text = ~city,
-                  popup.text = ~paste("Country:",country, "<br>", "City:", city))
+## TO DO: Make an example
 ```
 
 
 As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
 
-# data_stacked_bar_chart
+# data_world_shapefiles
 
 ```{r}
 library(oidnChaRts)
 ```
 
-This vignette covers the use of geo marker plots for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use the following dataset generated from https://doi.org/10.6084/m9.figshare.4516772. 
+This vignette covers the use of geo choropleth charts for visualising data with a variety of htmlwidget libraries, for demonstration purposes we use a set of shapefiles from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/. The shapesfiles have been pre-manipulated into a `SpatialPolygonsDataFrame` object ready for manipulation in R, here's a summary of the dataset:
 
 ```{r}
-head(data_geo_marker_plot)
+summary(data_world_shapefiles)
+```
+
+Rather than plotting all of the countries of the world, let's restrict ourselves to Asia:
+
+```{r}
+asia_shapefiles <- data_world_shapefiles[data_world_shapefiles$continent == "Asia", ]
+```
+
+Our choropleth can habe
+
+
+```{r}
+asia_shapefiles@data
+```
+
+
+```{r}
+gapminder
 ```
 
 
