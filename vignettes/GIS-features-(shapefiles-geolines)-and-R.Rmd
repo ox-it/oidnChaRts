@@ -1,0 +1,135 @@
+---
+title: "GIS features (shapefiles, geolines) and R"
+author: "Martin John Hadley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- ANY PACKAGES USED HERE MUST BE LOADED IN THE DESCRIPTION FILE AS WELL !-->
+
+# GIS Features and R
+
+In order to represent geographic features in a chart we need to have highly structured data, particularly for the following types of features:
+
+- Geographic regions (i.e the borders of lakes, countries, continents)
+- Geolines (explicit paths between sequential geo locations)
+
+These structures are complex because their representation depends on a number of parameters:
+
+- Map projection (some GIS data structures *include* projection data an therefore need to be treated carefully)
+- Scale (what scale of geographic features are important to you, i.e. moutains, 10m contour lines, building outlines)
+
+There are a number of different approaches to working with these features in R, however it's much more of a Wild West than dealing with rectangular datafiles. The [tidyverse](http://tidyverse.org) is becoming the de facto standard in rectangular data manipulation but there is no similar standard for working with the geographic features defined above.
+
+This document provides a brief overview of how to approach these features using a variety of tools. However, please note that this guide has been written to explain the visualisation examples in this library and should not be considered an exhaustive exploration of this subject.
+
+# Geographic regions (shapefiles)
+
+The representation of geographic regions requires a data structure that defines a convex polygon (with or without holes in it), there are essentially two different data structures used to store/communicate/share this data:
+
+- ESRI Shapefiles
+- GeoJSON
+
+## ESRI Shapefiles
+
+The ESRI shapefile (Environmental Systems Research Institute) standard is a collection of datafiles that when combined constitute an excellent data structure for representing geographic regions. You'll know you're looking at a set of ESRI shapefiles if you find a .zip/folder containing (at least) the following files:
+
+- this_shapefile.shp
+- this_shapefile.shx
+- this_shapefile.dbf
+
+For our purposes, we're not interested in what these files are for. If you're interested, start at [Wikipedia: Shapefile](https://en.wikipedia.org/wiki/Shapefile#cite_note-esri98-1).
+
+### Are these good shapefiles?
+
+Obtaining *good* shapefiles is a challenge in itself. Here are some of the concerns you should have in mind when looking for ESRI shapefiles:
+
+- Obtaining subunits of interest (countries, subunits, regions, constitutuencies, councils)
+- Disputed boundaries, there are many disputed boundaries between countries (and subunits)
+- Accuracy, what scale of geographic feature are you interested in?
+- Region names, there are often many names for a particularly subunit and some of these may be controversial or affected by which disputed border resolution you choose.
+
+In addition, you may require additional information to be specified for each region e.g. population. Often this information is contained within the shapefiles and can be manipulated directly within R.
+
+However, it's also extremely important to note that shapefiles may or may not contain *projection* data. You're thoroughly encouraged to obtain unprojected shapefiles, using the WGS84 datum standard (see https://en.wikipedia.org/wiki/World_Geodetic_System). Most example data in this library is obtained from unprojected ESRI shapefiles, you can check if your shapefiles are similarly formatted using this code
+
+```{r}
+library("sp")
+library("oidnChaRts")
+# proj4string(data_world_shapefiles)
+```
+
+### Importing shapefiles into R
+
+Many of the example datasets in this library are imported ESRI shapefiles, it's important you understand how to import your own shapefiles into R. You need to follow these steps:
+
+1. Download and unzip shapefiles
+
+ESRI shapefiles are typically provided as .zips, the `data_world_shapefiles` was obtained from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/ as follows:
+
+```{r, eval = FALSE}
+dir.create(file.path("data-raw"), showWarnings = FALSE)
+download.file(url = "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
+              destfile = "data-raw/world-shape-files.zip")
+unzip("data-raw/world-shape-files.zip", 
+      exdir = "data-raw/world-shape-files")
+```
+
+2. Import with `rgdal`
+
+The `rgdal` library provides a number of useful utilities for importing and processing ESRI shapefiles. `readOGR` is the function for importing ESRI files, it requires the following:
+
+- dsn: The folder containing the shapefiles
+- layer: The filenames of the shapefiles you're targeting
+
+Newcomers are often confused by the layer so here's the filenames of the shapefiles folder - they all have the same name meaning they refer to the same "layer":
+
+```{r, eval = FALSE}
+list.files("data-raw/world-shape-files")
+```
+
+The shapefiles are therefore imported as follows:
+
+```{r, eval = FALSE}
+library("rgdal")
+world_shapefiles <- readOGR(
+  dsn = "data-raw/world-shape-files/",
+  layer = "ne_50m_admin_0_countries",
+  verbose = F
+)
+summary(world_shapefiles)
+```
+
+### Manipulating ESRI shapefiles
+
+The imported ESRI shapefiles are held in R as a `SpatialPolygonsDataFrame` - which has a complex structure:
+
+- world_shapefiles@data: Information about each *region* in the shapefile, for instance the name and population of the region
+- world_shapefiles@polygons: The polygons that define each region, what is used by plotting functions.
+- world_shapefiles@plotOrder: The order in which polygons should be plotted, important if the shapefile includes features within a country like lakes.
+- world_shapefiles@bbox: The bounding box for the data points, i.e. what set of geographic points completely contain the polygons in the shapefiles.
+- world_shapefiles@proj4string: The projection which should be used when working with the polygons.
+
+Our example dataset includes quite a lot of information, for instance which continent each country belongs to:
+
+```{r}
+head(world_shapefiles@data)
+```
+
+Unfortunately, it is *not* possible to use the `tidyverse` for manipulating the `SpatialPolygonsDataFrame` object - instead one must use base R. For instance, if we were interested in extracting only those countries in Asia:
+
+```{r, eval = F}
+asia_shapefiles <- world_shapefiles[world_shapefiles$continent %in% c("Asia"), ]
+summary(asia_shapefiles)
+```
+
+
+
+
+
+
+
