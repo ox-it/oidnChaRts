@@ -121,4 +121,4 @@
 #'   \item{postal}{Postal shortcode for country}
 #' }
 #' @source \url{http://www.diamondse.info/}
-"data_stacked_bar_chart"
+"data_world_shapefiles"

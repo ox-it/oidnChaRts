@@ -46,7 +46,7 @@ leaflet() %>%
 # Export the SpatialPolygonsDataFrame object for use
 data_world_shapefiles <- world_shapefiles
 
-save(world_shapefiles, file = "data/data_world_shapefiles.rdata")
+save(data_world_shapefiles, file = "data/data_world_shapefiles.rdata")
 
 
 
