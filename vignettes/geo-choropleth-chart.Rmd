@@ -50,20 +50,3 @@ Our choropleth can habe
 ```{r}
 asia_shapefiles@data
 ```
-
-
-```{r}
-gapminder
-```
-
-
-## Play
-
-```{r}
-data_
-```
-
-
-
-
-

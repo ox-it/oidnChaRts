@@ -19,10 +19,6 @@ vignette: >
 
 Geo bubble charts contain circle that highlight important geographic positions, and the radius of this circle markers communicates additional information about these locations. Note that these visualisations can be become difficult to interpet where there are high point densities. For charts where you only wish to communicate the geographic locations of certain points, refer to `geo_marker_plot` instead.
 
-```{r, echo=FALSE}
-
-```
-
 
 As with all `oidnChaRts` libraries, you are advised to load the htmlwidget library you're using directly.
 
