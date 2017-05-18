@@ -6,15 +6,22 @@
 \title{geo_choropleth_chart}
 \usage{
 geo_choropleth_chart(spdf = NA, library = "leaflet",
-  line.color = "#2c7bb6", line.popup = NULL, line.mouseover = NULL,
-  start.color = "#fdae61", end.color = "#d7191c", both.color = "#7570b3",
-  line.options = list(weight = 4), termini.legend = TRUE,
-  termini.options = list(termini.radius = 4))
+  region.border.width = 1, region.border.color = "#000080",
+  region.value = NA, legend = list(type = "continuous", rcolorbrewer.palette
+  = , minColor = NULL))
 
 leaflet_geo_choropleth_chart(...)
 }
 \arguments{
-\item{spdf}{A SpatialPolygonsDataFrame}
+\item{spdf}{A SpatialPolygonsDataFrame containing the data to be displayed}
+
+\item{library}{Which library to use, leaflet is default.}
+
+\item{region.border.width}{Width of region borders, default to 1}
+
+\item{region.border.color}{Color of region borders, default to #000080}
+
+\item{region.value}{Column within spdf@data containing the numerical , i.e sub-categorisations. Must be given as formula, i.e. ~country}
 
 \item{...}{all arguments other than \code{data} and \code{library} provided to \code{geo_choropleth_chart}.}
 }

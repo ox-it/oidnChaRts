@@ -44,9 +44,27 @@ Rather than plotting all of the countries of the world, let's restrict ourselves
 asia_shapefiles <- data_world_shapefiles[data_world_shapefiles$continent == "Asia", ]
 ```
 
-Our choropleth can habe
+# Colorscales
+
+Before creating our choropleth we must consider the information communicated by the colour of the map regions, is the measure:
+
+- A categorical variable (i.e. Southern Asia, Western Asia, Central Asia)
+- A continuous variable (i.e. population of the region)
+
+These two types of variable work best with different types of legend, our generic `geo_choropleth_chart` function must therefore
 
 
-```{r}
-asia_shapefiles@data
+```{r,eval=FALSE}
+geo_choropleth_chart(
+  spdf = ,
+  library = ,
+  region.border.width = ,
+  region.border.color = ,
+  region.value = ,
+  legend = list(
+    type = "continuous", # default 
+    rcolorbrewer.palette = , # NULL if 
+    minColor = NULL, # null if not 
+  )
+)
 ```

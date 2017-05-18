@@ -4,23 +4,24 @@
 #'
 #' @rdname map-geo-choropleth-chart
 #' @import htmltools
-#' @param spdf A SpatialPolygonsDataFrame
+#' @param spdf A SpatialPolygonsDataFrame containing the data to be displayed
+#' @param library Which library to use, leaflet is default.
+#' @param region.border.width Width of region borders, default to 1
+#' @param region.border.color Color of region borders, default to #000080
+#' @param region.value Column within spdf@data containing the numerical , i.e sub-categorisations. Must be given as formula, i.e. ~country
 #' 
 #'
 #' @export
 geo_choropleth_chart <-
   function(spdf = NA,
            library = "leaflet",
-           line.color = "#2c7bb6",
-           line.popup = NULL,
-           line.mouseover = NULL,
-           start.color = "#fdae61",
-           end.color = "#d7191c",
-           both.color = "#7570b3",
-           line.options = list(weight = 4),
-           termini.legend = TRUE,
-           termini.options = list(
-             termini.radius = 4
+           region.border.width = 1,
+           region.border.color = "#000080",
+           region.value = NA,
+           legend = list(
+             type = "continuous", # default 
+             rcolorbrewer.palette = , # NULL if 
+             minColor = NULL # null if not 
            )) {
     ## check library is supported
     if (!library %in% c("leaflet")) {
