@@ -40,6 +40,8 @@ All code within this library is made available under the MIT License.
 Credits
 =======
 
+The logo for this library uses the "ALL OF THE X" meme inspired by the wonderful work of Hyperbole and a Half - <http://hyperboleandahalf.blogspot.com/2010/06/this-is-why-ill-never-be-adult.html>
+
 The majority of the credit for this library belongs to the `htmlwidget` library developers, including:
 
 -   <https://github.com/jbkunst/highcharter>
