@@ -50,6 +50,8 @@ In stacked/grouped bar chart there are "categories" and "subcategories" of obser
 In order to create these charts, we must first process the data using the tidyverse:
 
 ```{r}
+library(tidyverse)
+library(oidnChaRts)
 data_stacked_bar_chart %>%
   group_by(country_group, country) %>%
   summarise(total = sum(count)) %>%
