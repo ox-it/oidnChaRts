@@ -43,13 +43,15 @@ devtools::install_github("ox-it/oidnChaRts")
 
 # License
 
-Please note that the examples within this package use JavaScript libraries that have restrictive licensing conditions. 
+Please note that the examples within this package use JavaScript libraries that have restrictive licensing conditions.
 
 The `highcharter` library is dependent on [highcharts.com](highcharts.com) which is free for non-commercial use only. Please review the licensing options and terms before using this software, as the oidnChaRts license neither provides nor implies a license for Highcharts. 
 
 All code within this library is made available under the MIT License.
 
 # Credits
+
+The logo for this library uses the "ALL OF THE X" meme inspired by the wonderful work of Hyperbole and a Half - http://hyperboleandahalf.blogspot.com/2010/06/this-is-why-ill-never-be-adult.html
 
 The majority of the credit for this library belongs to the `htmlwidget` library developers, including:
 
