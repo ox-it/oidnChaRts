@@ -3,31 +3,18 @@
 #               destfile = "data-raw/world-shape-files.zip")
 # unzip("data-raw/world-shape-files.zip", exdir = "data-raw/world-shape-files")
 
-library("GISTools")
-library("rgdal")
+# library("GISTools")
+# library("rgdal")
+library("sf")
 library("tidyverse")
 
 ## Load shapefiles
-world_shapefiles <- readOGR(
-  dsn = "data-raw/world-shape-files/",
-  layer = "ne_50m_admin_0_countries",
-  verbose = F
-)
+world_shapefiles <- st_read("data-raw/world-shape-files/")
 
-## coerce to tidyverse for cleaning
-world_shpfiles_data <- as_data_frame(world_shapefiles@data)
-
-world_shpfiles_data <- world_shpfiles_data %>%
-  mutate_if(is.factor, as.character) %>% # remove factors
+world_shapefiles <- world_shapefiles %>%
+  mutate_if(is.factor, as.character) %>%
   select(name, name_long, type, continent, region_un, subregion, 
          sovereignt,subunit, postal)
-
-world_shpfiles_data %>% colnames()
-
-world_shapefiles$postal
-
-## Update! 
-world_shapefiles@data <- as.data.frame(world_shpfiles_data, stringsAsFactors = FALSE)
 
 ## Test visualisation
 library(leaflet)

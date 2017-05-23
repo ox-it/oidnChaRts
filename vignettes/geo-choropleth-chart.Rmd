@@ -41,7 +41,8 @@ summary(data_world_shapefiles)
 Rather than plotting all of the countries of the world, let's restrict ourselves to Asia:
 
 ```{r}
-asia_shapefiles <- data_world_shapefiles[data_world_shapefiles$continent == "Asia", ]
+asia_shapefiles <- data_world_shapefiles %>%
+  filter(continent == "Asia")
 ```
 
 # Colorscales

@@ -22,9 +22,16 @@ These structures are complex because their representation depends on a number of
 - Map projection (some GIS data structures *include* projection data an therefore need to be treated carefully)
 - Scale (what scale of geographic features are important to you, i.e. moutains, 10m contour lines, building outlines)
 
-There are a number of different approaches to working with these features in R, however it's much more of a Wild West than dealing with rectangular datafiles. The [tidyverse](http://tidyverse.org) is becoming the de facto standard in rectangular data manipulation but there is no similar standard for working with the geographic features defined above.
+There are a number of different approaches to working with these features in R, however it's currently more of a Wild West of options than when dealing with rectangular datafiles. The [tidyverse](http://tidyverse.org) is becoming the de facto standard in rectangular data manipulation, the fairly new `sf` library provides a framework for working with geographic features that can easily be reused alongside the tidyverse.
 
-This document provides a brief overview of how to approach these features using a variety of tools. However, please note that this guide has been written to explain the visualisation examples in this library and should not be considered an exhaustive exploration of this subject.
+The `sf` library has been [funded by the R Consortium](https://www.r-consortium.org/projects/awarded-projects) and is a significant improvement over previous offerings for working with geographic features. You may previously have worked with the `sp` library, which created `Spatial*DataFrame` objects. With `sf` all features are stored within an "sf data.frame", which can be operated on directly with the tidyerse.
+
+While the `sf` vignettes are designed for readers with a good knowledge of GIS vocabulary, they are still recommended reading if you are doing a significant amount of GIS work in R:
+
+- [Introduction to sf](https://edzer.github.io/sfr/articles/sf1.html)
+- [Conversion between sf and non-sf objects](https://edzer.github.io/sfr/articles/sf2.html)
+- [Manipulating features](https://edzer.github.io/sfr/articles/sf3.html)
+
 
 # Geographic regions (shapefiles)
 
@@ -57,9 +64,9 @@ In addition, you may require additional information to be specified for each reg
 However, it's also extremely important to note that shapefiles may or may not contain *projection* data. You're thoroughly encouraged to obtain unprojected shapefiles, using the WGS84 datum standard (see https://en.wikipedia.org/wiki/World_Geodetic_System). Most example data in this library is obtained from unprojected ESRI shapefiles, you can check if your shapefiles are similarly formatted using this code
 
 ```{r, eval = FALSE}
-library("sp")
+library("sf")
 library("oidnChaRts")
-# proj4string(data_world_shapefiles)
+summary(data_world_shapefiles$geometry)
 ```
 
 ### Importing shapefiles into R
@@ -73,14 +80,14 @@ ESRI shapefiles are typically provided as .zips, the `data_world_shapefiles` was
 ```{r, eval = FALSE}
 dir.create(file.path("data-raw"), showWarnings = FALSE)
 download.file(url = "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
-              destfile = "data-raw/world-shape-files.zip")
-unzip("data-raw/world-shape-files.zip", 
-      exdir = "data-raw/world-shape-files")
+destfile = "data-raw/world-shape-files.zip")
+unzip("data-raw/world-shape-files.zip",
+exdir = "data-raw/world-shape-files")
 ```
 
-2. Import with `rgdal`
+2. Import with `sf`
 
-The `rgdal` library provides a number of useful utilities for importing and processing ESRI shapefiles. `readOGR` is the function for importing ESRI files, it requires the following:
+The `sf` library provides a single super function for importing GIS data, which infers the type of data from file extensions and a number of other heuristics. To import ESRI shapefiles it's simply necessary to specify the following arguements:
 
 - dsn: The folder containing the shapefiles
 - layer: The filenames of the shapefiles you're targeting
@@ -94,36 +101,9 @@ list.files("data-raw/world-shape-files")
 The shapefiles are therefore imported as follows:
 
 ```{r, eval = FALSE}
-library("rgdal")
-world_shapefiles <- readOGR(
-  dsn = "data-raw/world-shape-files/",
-  layer = "ne_50m_admin_0_countries",
-  verbose = F
-)
+library("sf")
+world_shapefiles <- read_sf(dsn = "data-raw/world-shape-files/", layer = "ne_50m_admin_0_countries")
 summary(world_shapefiles)
-```
-
-### Manipulating ESRI shapefiles
-
-The imported ESRI shapefiles are held in R as a `SpatialPolygonsDataFrame` - which has a complex structure:
-
-- world_shapefiles\@data: Information about each *region* in the shapefile, for instance the name and population of the region
-- world_shapefiles\@polygons: The polygons that define each region, what is used by plotting functions.
-- world_shapefiles\@plotOrder: The order in which polygons should be plotted, important if the shapefile includes features within a country like lakes.
-- world_shapefiles\@bbox: The bounding box for the data points, i.e. what set of geographic points completely contain the polygons in the shapefiles.
-- world_shapefiles\@proj4string: The projection which should be used when working with the polygons.
-
-Our example dataset includes quite a lot of information, for instance which continent each country belongs to:
-
-```{r, eval = FALSE}
-head(world_shapefiles@data)
-```
-
-Unfortunately, it is *not* possible to use the `tidyverse` for manipulating the `SpatialPolygonsDataFrame` object - instead one must use base R. For instance, if we were interested in extracting only those countries in Asia:
-
-```{r, eval = FALSE}
-asia_shapefiles <- world_shapefiles[world_shapefiles$continent %in% c("Asia"), ]
-summary(asia_shapefiles)
 ```
 
 

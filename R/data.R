@@ -100,16 +100,12 @@
 
 #' World Shapefiles
 #'
-#' A SpatialPolygonsDataFrame dataset sourced from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/ which includes shapefiles for all countries, with a scale of 1:50m.
+#' A "sf data.frame" sourced from http://www.naturalearthdata.com/downloads/50m-cultural-vectors/ which includes shapefiles for all countries, with a scale of 1:50m.
 #' 
-#' Note that data_world_shapefiles@data is a data.frame containing exclusively identifying information about each country, i.e. it does not contain any information on the population or other metrics of the country.
-#' 
-#' At present, the best way to subset SpatialPolygonsDataFrame objects is with base R, i.e. data_world_shapefiles[data_world_shapefiles$continent %in% c("Asia"), ] will return only those countries where the continent is listed as "Asia".
+#' If you are unfamiliar with using the "sf data.frame" object, please refer to vignette("GIS-features", package = "oidnChaRts")
 #'
-#'
-#' @format A SpatialPolygonsDataFrame with 241 elements, the @data subcomponent is a data.frame containing 241 observatiosn with 9 variables:
+#' @format A "sf data.frame" with 241 elements, with 9 variables and 1 column containing the geographic feature corresponding to the observation.
 #' \describe{
-#'   \item{timestamp}{Date when the Online Labour Index was sampled for projects, this date is updated at least as often as every new releaste of the oidnChaRts library}
 #'   \item{name}{Abbreviated Name of the country, i.e. N. Mariana Is. vs Northern Mariana Islands}
 #'   \item{name_long}{Full name of the country, i.e. N. Mariana Is. vs Northern Mariana Islands}
 #'   \item{type}{Type of country, i.e. Sovereign country, Dependency, etc}
