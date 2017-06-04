@@ -446,4 +446,45 @@ data_stacked_bar_chart %>%
          yaxis = list(title = ""))
 ```
 
+## Advanced Tooltips
+
+The tooltips for stacked barcharts often do not apply to all subcategories within a category by default, one must specify that the tooltip must be shared. Explicit customisation of the tooltip then requires some programming in JavaScript.
+
+Here's a small example for highcharter:
+
+```{r}
+my_stack <- data_frame(
+  cat = rep(c("a","b","c","d", "e"), 5),
+  subcat = rep(c("u", "x", "y", "z", "w"), each = 5),
+  value = round(rnorm(25, mean = 40, sd = 10))
+)
+
+
+my_stack %>%
+  stacked_bar_chart(
+    library = "highcharter",
+    categories.column = ~cat,
+    subcategories.column = ~subcat,
+    value.column = ~value
+  ) %>%
+  hc_plotOptions(series = list(stacking = "stack")) %>%
+  hc_tooltip(
+    formatter = JS("function(){
+
+                  var subcat = '';
+                  $.each(this.points,function(i, point){
+                    subcat += '<b>' + this.point.series.name + ': <b>' + 
+                                Highcharts.numberFormat(this.point.plotY, 1) +
+                                '<br/>';
+                  });
+
+                  return 'Category: ' + this.x.name + '<br/>' +
+                  subcat;
+                   }"),
+    shared = TRUE
+  )
+```
+
+
+
 
