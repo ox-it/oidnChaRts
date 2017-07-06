@@ -25,7 +25,7 @@ Installing
 This library is unlikely to be submitted to CRAN, it must be installed as follows:
 
 ``` r
-devtools::install_github("ox-it/oidnChaRts")
+devtools::install_github("ox-it/oidnChaRts", build_vignettes = TRUE)
 ```
 
 License

@@ -38,7 +38,7 @@ geo_lines_plot(data_geo_lines_plot,
 This library is unlikely to be submitted to CRAN, it must be installed as follows:
 
 ```{r, eval=FALSE}
-devtools::install_github("ox-it/oidnChaRts")
+devtools::install_github("ox-it/oidnChaRts", build_vignettes = TRUE)
 ```
 
 # License
