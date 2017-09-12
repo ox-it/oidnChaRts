@@ -118,6 +118,11 @@ hc_stacked_bar_chart <- function(...) {
     spread_(f_text(viz.args$subcategories.column),
             f_text(viz.args$value.column))
   
+  valid_names_lookup <- data.frame(
+    original = names(wide_data),
+    replacement = make.names(names(wide_data))
+  )
+  
   wide_data <-
     stats::setNames(wide_data, make.names(names(wide_data)))
   
@@ -142,7 +147,10 @@ hc_stacked_bar_chart <- function(...) {
     chart <<-
       hc_add_series(
         hc = chart,
-        name = gsub("[.]", " ", x),
+        name = valid_names_lookup %>%
+          filter(replacement == x) %>%
+          select(original) %>%
+          .[[1]],
         data = wide_data %>% select_(x) %>% unlist(use.names = F),
         index = {
           if (any(is.na(subcategories_order))) {
