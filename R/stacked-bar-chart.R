@@ -125,7 +125,7 @@ hc_stacked_bar_chart <- function(...) {
   
   wide_data <-
     stats::setNames(wide_data, make.names(names(wide_data)))
-  
+
   ## order category columns by categories_order
   wide_data <-
     wide_data[match(categories_order, wide_data[[f_text(viz.args$categories.column)]]),]
