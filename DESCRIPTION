@@ -1,7 +1,7 @@
 Package: oidnChaRts
 Type: Package
 Title: Utility Functions For htmlwidget Visualisations
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Martin", "Hadley", email = "martinjohnhadley@gmail.com", role = c("aut", "cre"))
 Description: Provides templates for creating rich interactive charts/maps/networks, including; bar charts, time series,
     choropleth, scatter geo plots, ego networks and more. All charts are created using htmlwidget libraries, the most widely 
@@ -24,7 +24,18 @@ Imports:
     highcharter,
     plotly,
     rbokeh,
-    scales
+    scales,
+    DBI,
+    assertthat,
+    tibble,
+    broom,
+    igraph,
+    lubridate,
+    purrr,
+    quantmod,
+    rlist,
+    viridisLite,
+    base64enc,
 URL: http://ox-it.github.io/OxfordIDN_htmlwidgets
 RoxygenNote: 6.0.1
 Suggests: knitr,
